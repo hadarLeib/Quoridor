@@ -291,12 +291,13 @@ function isFencePlaceable (fence) {
 		if(isFencePlaceable(fence)){
 			$(fence).addClass('placed');
 			getAdjacentFence(fence).addClass('placed');
+                        updateGraphFence(fence); 
 			this.currentTurn.fencesRemaining--;
 			switchPlayer();
 		}
 	}
 
-	function updateGraph(fence){
+	function updateGraphFence(fence){
 		//vertical (a/b - c/d)
 		// a | b
 		// c | d
@@ -310,6 +311,9 @@ function isFencePlaceable (fence) {
 		var b;
 		var c;
 		var d;
+                var fType;
+                var idArr = [];
+              
 		var fenceId = parseInt($(fence).attr('id').split('_')[1]);
 		var nextFence = getAdjacentFence(fence);
 		var nextFenceId = parseInt($(nextFence).attr('id').split('_')[1]);
@@ -319,6 +323,7 @@ function isFencePlaceable (fence) {
 			b = fenceId + 1;
 			c = nextFenceId - 8;
 			d = nextFenceId + 1;
+                        fType = "h";
 		}
 
 		else{
@@ -326,9 +331,11 @@ function isFencePlaceable (fence) {
 			b = a + 1;
 			c = nextFenceId - (8 * (fenceId/17));
 			d = c + 1;
+                        fType = "v";
 		}
-
+               
 		//send json
+                sendFence(a, b, c, d, fType);
 	}
 
 	function updateInformation(){
@@ -429,7 +436,16 @@ $(function() {
                 webSocket.onmessage = function(event){
                     
                     var obj = JSON.parse(event.data);
-                    writeResponse(obj.name + "," + obj.message );
+                   
+                    if (typeof obj == "object"){
+                        //Json
+                        writeResponse(obj.name + "," + obj.message );
+                    }
+                    else {
+                        //Not Json
+                        writeResponse(event.data);
+                    }
+                    
                 };
  
                 webSocket.onclose = function(event){
@@ -444,6 +460,22 @@ $(function() {
                 var text = document.getElementById("messageinput").value;
                 
                 var obj  = {"message":text, "name" : "hadar"};
+                
+                                webSocket.send(JSON.stringify(obj));
+
+            }
+            
+            function sendFence(a, b, c, d, fType){
+                
+                var obj  = {type : "f", a : a, b : b, c : c, d : d, fType : fType};
+//                var obj  = {"message" : fType, "name" : "hadar"};
+                                webSocket.send(JSON.stringify(obj));
+
+            }
+            function sendMove(){
+                var text = document.getElementById("messageinput").value;
+                
+                
                 
                                 webSocket.send(JSON.stringify(obj));
 

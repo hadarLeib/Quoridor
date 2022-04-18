@@ -1,3 +1,6 @@
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.io.IOException;
  
 import javax.websocket.OnClose;
@@ -32,13 +35,19 @@ public class server {
     }
  
     /**
-     * When a user sends a message to the server, this method will intercept the message
+     * When a user sends a message to the server, this method will intercept  react to it.
      * and allow us to react to it. For now the message is read as a String.
      */
     @OnMessage
     public void onMessage(String message, Session session){
         System.out.println("Message from " + session.getId() + ": " + message);
-        
+        JsonParser parser = new JsonParser(); 
+        JsonObject obj = parser.parse(message).getAsJsonObject(); 
+        int a = obj.get("a").getAsInt();
+        int b = obj.get("b").getAsInt();
+        int c = obj.get("c").getAsInt();
+        int d = obj.get("d").getAsInt();
+        //String s = jobj.get("message").getAsString();
         try {
             session.getBasicRemote().sendText(message);
         } catch (IOException ex) {
