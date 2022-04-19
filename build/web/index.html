@@ -157,6 +157,7 @@
 	
 	function isPossibleMove (newPosition){
 		var isLegal = true;
+                isLegal = sendMove(oldPos, newPos)
 
 		return (isAdjacentSquare(newPosition) && isLegal);
 	}
@@ -228,6 +229,9 @@
 	
 function isFencePlaceable (fence) {
 	var isLegal = true;
+        updateGraphFence(fence);
+        
+        
 	var nextFence = getAdjacentFence(fence);
 
 	var fenceId = parseInt($(fence).attr('id').split('_')[1]);
@@ -291,7 +295,6 @@ function isFencePlaceable (fence) {
 		if(isFencePlaceable(fence)){
 			$(fence).addClass('placed');
 			getAdjacentFence(fence).addClass('placed');
-                        updateGraphFence(fence); 
 			this.currentTurn.fencesRemaining--;
 			switchPlayer();
 		}
@@ -335,7 +338,9 @@ function isFencePlaceable (fence) {
 		}
                
 		//send json
-                sendFence(a, b, c, d, fType);
+                var isLegal = sendFence(a, b, c, d, fType);
+                
+                //return bool is legal
 	}
 
 	function updateInformation(){
@@ -470,14 +475,18 @@ $(function() {
                 var obj  = {type : "f", a : a, b : b, c : c, d : d, fType : fType};
 //                var obj  = {"message" : fType, "name" : "hadar"};
                                 webSocket.send(JSON.stringify(obj));
+                                
+                //return bool is legal
 
             }
-            function sendMove(){
-                var text = document.getElementById("messageinput").value;
+            function sendMove(oldPos, newPos){
+                //var text = document.getElementById("messageinput").value;
                 
-                
+                var obj = {type : "m", oldPos : oldPos, newPos : newPos}
                 
                                 webSocket.send(JSON.stringify(obj));
+                                
+                //return bool is legal
 
             }
            
