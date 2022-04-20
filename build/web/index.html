@@ -74,7 +74,7 @@
 		<!--<script type="text/javascript" src="/js/quoridor.js"></script> -->
 		
 		<script>
-		
+	var legalMove = true;
 		var Quoridor = new function() {
 	this.boardDimension = 9;
 	this.startingFences = 10;
@@ -157,9 +157,10 @@
 	
 	function isPossibleMove (newPosition){
 		var isLegal = true;
-                isLegal = sendMove(oldPos, newPos)
+                sendMove(this.currentTurn.pos, newPosition)
+                
 
-		return (isAdjacentSquare(newPosition) && isLegal);
+		return (legalMove);
 	}
 	
 	function isAdjacentSquare(newPosition){
@@ -414,6 +415,7 @@ $(function() {
                        
             var webSocket;
             var messages = document.getElementById("messages");
+            
            
            
             function openSocket(){
@@ -444,7 +446,9 @@ $(function() {
                    
                     if (typeof obj == "object"){
                         //Json
-                        writeResponse(obj.name + "," + obj.message );
+                        writeResponse("" + obj.isLegal);
+                        //legalMove = obj.isLegal;
+                        
                     }
                     else {
                         //Not Json

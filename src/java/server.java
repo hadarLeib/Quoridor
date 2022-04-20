@@ -29,7 +29,7 @@ public class server {
     
     public void onOpen(Session session){
         System.out.println(session.getId() + " has opened a connection");
-        System.out.println("h");
+
         try {
             session.getBasicRemote().sendText("Connection Established");
         } catch (IOException ex) {
@@ -46,7 +46,12 @@ public class server {
      */
     @OnMessage
     public void onMessage(String message, Session session){
-        int a, b, c, d, oldPos, newPos;
+        int a, b, c, d, oldPos, newPos, posDif;
+        JsonObject innerObject = new JsonObject();
+        Gson gson = new Gson();
+        boolean isAdj, isFenceLegal;
+        String str = "";
+        
         System.out.println("Message from " + session.getId() + ": " + message);
         JsonParser parser = new JsonParser(); 
         JsonObject obj = parser.parse(message).getAsJsonObject(); 
@@ -58,17 +63,35 @@ public class server {
             c = obj.get("c").getAsInt();
             d = obj.get("d").getAsInt();
             
-            this.game.getBoard().removeEdge(a, b);
-            this.game.getBoard().removeEdge(c, d);
+            isFenceLegal = this.game.getBoard().isValidFence(this.game.getCurrentPlayerPos(), this.game.getCurrPlayer());
+            if(isFenceLegal){
+                this.game.getBoard().removeEdge(a, b);
+                this.game.getBoard().removeEdge(c, d);
+            }
+            
+            innerObject.addProperty("isLegal", isFenceLegal);
+            
+            
         }
         
         else{
             oldPos = obj.get("oldPos").getAsInt();
             newPos = obj.get("newPos").getAsInt();
+            
+            
+            isAdj = this.game.checkIfLegalConsideringJump(oldPos, newPos);
+            
+            if(isAdj){
+                this.game.setPlayerPos(this.game.getCurrPlayer(), newPos);
+                this.game.switchPayer();
+            }
+            
+            innerObject.addProperty("isLegal", isAdj);
         }
         
+        str = gson.toJson(innerObject);
         try {
-            session.getBasicRemote().sendText(message);
+            session.getBasicRemote().sendText(str);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
