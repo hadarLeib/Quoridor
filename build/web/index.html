@@ -230,7 +230,6 @@
 	
 function isFencePlaceable (fence) {
 	var isLegal = true;
-        updateGraphFence(fence);
         
         
 	var nextFence = getAdjacentFence(fence);
@@ -294,6 +293,7 @@ function isFencePlaceable (fence) {
 	
 	function placeFence (fence) {
 		if(isFencePlaceable(fence)){
+                        updateGraphFence(fence);
 			$(fence).addClass('placed');
 			getAdjacentFence(fence).addClass('placed');
 			this.currentTurn.fencesRemaining--;
@@ -310,7 +310,7 @@ function isFencePlaceable (fence) {
 		// a c
 		// _ _
 		// b d
-
+                
 		var a;
 		var b;
 		var c;
@@ -323,21 +323,23 @@ function isFencePlaceable (fence) {
 		var nextFenceId = parseInt($(nextFence).attr('id').split('_')[1]);
 
 		if(($(fence).hasClass("horizontal"))){
-			a = fenceId - 8;
-			b = fenceId + 1;
-			c = nextFenceId - 8;
-			d = nextFenceId + 1;
+                        //alert("horizontal");
+			a = (fenceId - (8 * Math.floor(fenceId/17)) - 8);
+			b = a + 9;
+			c = a + 1;
+			d = b + 1;
                         fType = "h";
 		}
 
 		else{
-			a = fenceId - (8 * (fenceId/17));
+                        //alert("vertical");
+			a = fenceId - (8 * Math.floor(fenceId/17));
 			b = a + 1;
-			c = nextFenceId - (8 * (fenceId/17));
+			c = nextFenceId - (8 * Math.floor(nextFenceId/17));
 			d = c + 1;
                         fType = "v";
 		}
-               
+                //alert("a:" + a + "b:" + b + "c:" + c + "d:" + d);
 		//send json
                 var isLegal = sendFence(a, b, c, d, fType);
                 
