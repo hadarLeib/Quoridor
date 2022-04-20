@@ -1,2 +1,0 @@
-# Quoridor
-Quoridor AI
