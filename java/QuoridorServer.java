@@ -9,7 +9,7 @@ public class QuoridorServer {
 
         try {
             server.start();
-            System.out.println("\nServer Is Up...");
+            System.out.println("\nServer is up...");
             System.out.println("Press any key to stop the server...\n");
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
             bufferRead.readLine();

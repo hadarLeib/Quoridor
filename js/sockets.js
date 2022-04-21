@@ -51,7 +51,9 @@ function openSocket() {
 function send() {
     var text = document.getElementById("messageinput").value;
 
-    var obj = { "message": text, "name": "hadar" };
+    // [Ido] Added type to prevent error on the server when trying 
+    // to read "type" for regular `send` messages.
+    var obj = { "type": "s", "message": text, "name": "hadar" };
 
     webSocket.send(JSON.stringify(obj));
 }

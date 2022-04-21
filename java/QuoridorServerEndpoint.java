@@ -1,4 +1,5 @@
 import javax.websocket.OnClose;
+import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -25,7 +26,6 @@ public class QuoridorServerEndpoint {
         }
 
         this.game = new Game();
-        this.game.getBoard().printAdjGraph();
     }
 
     @OnMessage
@@ -42,7 +42,13 @@ public class QuoridorServerEndpoint {
         JsonObject obj = parser.parse(message).getAsJsonObject();
         String messageType = obj.get("type").getAsString();
 
-        if (messageType.equals("f")) {
+        // `send` message
+        if (messageType.equals("s")) {
+            return;
+        }
+
+        // Fence move
+        else if (messageType.equals("f")) {
             a = obj.get("a").getAsInt();
             b = obj.get("b").getAsInt();
             c = obj.get("c").getAsInt();
@@ -59,7 +65,8 @@ public class QuoridorServerEndpoint {
             innerObject.addProperty("isLegal", isFenceLegal);
         }
 
-        else {
+        // Player move
+        else if (messageType.equals("m")) {
             oldPos = obj.get("oldPos").getAsInt();
             newPos = obj.get("newPos").getAsInt();
 
@@ -85,5 +92,10 @@ public class QuoridorServerEndpoint {
     @OnClose
     public void onClose(Session session) {
         System.out.println("[Disconnection] SessionID = " + session.getId());
+    }
+
+    @OnError
+    public void onError(Throwable e) {
+        System.out.println("[Error] " + e);
     }
 }
