@@ -48,7 +48,7 @@ public class Board {
         }
     }
 
-    public boolean isValidFence(int playerPos, Player currentPlayer) {
+    public boolean playerCanGetToEnd(int playerPos, Player currentPlayer) {
         boolean[] visited = new boolean[this.vertices];
         int[] parents = new int[this.vertices];
 

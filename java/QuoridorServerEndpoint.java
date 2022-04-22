@@ -32,10 +32,11 @@ public class QuoridorServerEndpoint {
     public void onMessage(String message, Session session) {
         System.out.println("[Message] " + message);
 
-        int a, b, c, d, oldPos, newPos;
+        int a, b, c, d, oldPos, newPos, fenceLegalErrorType, firstFenceId, secondFenceId;
+        String fenceType = "";
         JsonObject innerObject = new JsonObject();
         Gson gson = new Gson();
-        boolean isAdj, isFenceLegal;
+        boolean isAdj;
         String str = "";
 
         JsonParser parser = new JsonParser();
@@ -53,19 +54,17 @@ public class QuoridorServerEndpoint {
             b = obj.get("b").getAsInt();
             c = obj.get("c").getAsInt();
             d = obj.get("d").getAsInt();
+            firstFenceId = obj.get("firstId").getAsInt();
+            secondFenceId = obj.get("secondId").getAsInt();
+            fenceType = obj.get("fType").getAsString();
 
-            this.game.getBoard().removeEdge(a, b);
-            this.game.getBoard().removeEdge(c, d);
-
-            isFenceLegal = this.game.getBoard().isValidFence(this.game.getCurrentPlayerPos(),
-                    this.game.getCurrPlayer());
-
-            if (!isFenceLegal) {
-                this.game.getBoard().addEdge(a, b);
-                this.game.getBoard().addEdge(c, d);
+            fenceLegalErrorType = this.game.checkFenceLegal(firstFenceId, secondFenceId, a, b, c, d);
+            if(fenceLegalErrorType == 1){ // no errors - legal fence move
+                this.game.addFenceToMap(firstFenceId, secondFenceId, (fenceType.equals("h")));
             }
 
-            innerObject.addProperty("isLegal", isFenceLegal);
+            innerObject.addProperty("isLegal", (fenceLegalErrorType==1)); // if returns one, no errors
+            innerObject.addProperty("errorType", fenceLegalErrorType);
             
         }
 

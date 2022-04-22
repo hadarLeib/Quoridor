@@ -185,11 +185,8 @@ var secondObjectSent;
     }
 
     function placeFence(fence) {
-        if (isFencePlaceable(fence)) {
-            firstObjectSent = fence;
-            setUpForSenendFence(fence);
-          
-        }
+        firstObjectSent = fence;
+        setUpForSenendFence(fence);
     }
 
      placeFenceForReal= function()
@@ -222,7 +219,6 @@ var secondObjectSent;
         var c;
         var d;
         var fType;
-        var idArr = [];
 
         var fenceId = parseInt($(fence).attr('id').split('_')[1]);
         var nextFence = getAdjacentFence(fence);
@@ -247,9 +243,8 @@ var secondObjectSent;
         }
         //alert("a:" + a + "b:" + b + "c:" + c + "d:" + d);
         //send json
-        var isLegal = sendFence(a, b, c, d, fType);
+        sendFence(fenceId, nextFenceId, a, b, c, d, fType);
 
-        //return bool is legal
     }
 
     function updateInformation() {

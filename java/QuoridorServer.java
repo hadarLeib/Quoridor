@@ -16,7 +16,7 @@ public class QuoridorServer {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            server.stop();
+            server.stop();  
         }
     }
 }

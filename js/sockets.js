@@ -33,13 +33,33 @@ function openSocket() {
         if (typeof obj == "object") {
             //Json
 
-            if(obj.isLegal==true)
-            {
-                if(obj.messageType == ("f"))
+            if(obj.messageType == "f"){
+                if(obj.isLegal == true){
                     placeFenceForReal();
-                else if(obj.messageType == ("m"))
-                    movePlayerForReal();
+                }
+
+                // fence on fence
+                else if (obj.errorType == 2){
+                    alert("There already is a fence there");
+                }
+
+                // fence out of bounds
+                else if (obj.errorType == 3){
+                    alert("Fence is out of bounds");
+                }
+
+                // fence will completely block player
+                else if (obj.errorType == 4){
+                    alert("Placing a fence there will completely block the other player");
+                }
+
             }
+
+            else if(obj.messageType == "m"){
+                movePlayerForReal();
+            }
+
+
             writeResponse("" + obj.isLegal);
         }
         else {
@@ -66,8 +86,8 @@ function send() {
     webSocket.send(JSON.stringify(obj));
 }
 
-function sendFence(a, b, c, d, fType) {
-    var obj = { type: "f", a: a, b: b, c: c, d: d, fType: fType };
+function sendFence(fenceId, nextFenceId, a, b, c, d, fType) {
+    var obj = { type: "f", firstId: fenceId, secondId: nextFenceId, a: a, b: b, c: c, d: d, fType: fType };
     webSocket.send(JSON.stringify(obj));
 }
 
