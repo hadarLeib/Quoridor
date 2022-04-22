@@ -93,8 +93,8 @@ public class Game {
         return this.fencesInGame;
     }
 
-    public void addFenceToMap(int firstId, int secondId, boolean isHorizontal){
-        Fence fence = new Fence(firstId, secondId, isHorizontal);
+    public void addFenceToMap(int firstId, int secondId, int a, int b, int c, int d, boolean isHorizontal){
+        Fence fence = new Fence(firstId, secondId, isHorizontal, a, b, c, d);
         this.fencesInGame.put(firstId, fence);
         this.fencesInGame.put(secondId, fence);
     }
