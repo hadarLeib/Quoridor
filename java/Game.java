@@ -8,13 +8,30 @@ public class Game {
     private HashMap<Integer, Fence> fencesInGame;
 
 
-    Game() {
+    public Game() {
         this.board = new Board();
         this.board.initAdjBoard();
         this.player1 = new Player(4, true); // white - starts from low to high
         this.player2 = new Player(76, false); // black - starts from high to low
         this.currentPlayer = player1;
         this.fencesInGame = new HashMap<Integer, Fence>();
+    }
+
+    // copy constructor
+    public Game(Game game){
+        this.board = new Board(game.getBoard());
+        this.player1 = new Player(game.getPlayerOne());
+        this.player2 = new Player(game.getPlayerTwo());
+        this.currentPlayer = game.getCurrPlayer();
+        this.fencesInGame.putAll(game.getfencesInGame());
+    }
+
+    public Player getPlayerOne(){
+        return this.player1;
+    }
+
+    public Player getPlayerTwo(){
+        return this.player2;
     }
 
     public void switchPayer() {

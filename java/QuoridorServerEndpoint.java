@@ -61,6 +61,8 @@ public class QuoridorServerEndpoint {
             fenceLegalErrorType = this.game.checkFenceLegal(firstFenceId, secondFenceId, a, b, c, d);
             if(fenceLegalErrorType == 1){ // no errors - legal fence move
                 this.game.addFenceToMap(firstFenceId, secondFenceId, a, b, c, d, (fenceType.equals("h")));
+                this.game.getCurrPlayer().useFence();
+                this.game.switchPayer();
             }
 
             innerObject.addProperty("isLegal", (fenceLegalErrorType==1)); // if returns one, no errors

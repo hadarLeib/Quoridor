@@ -1,23 +1,31 @@
 public class Player {
-    private int possition;
+    private int position;
     private boolean isWhite;
     private int amountFences;
 
-    public Player(int possition, boolean playerNo) {
-        this.isWhite = playerNo;
-        this.possition = possition;
+    public Player(int possition, boolean isWhite) {
+        this.isWhite = isWhite;
+        this.position = possition;
         this.amountFences = 10;
     }
+
+    // copy constructor
+    public Player(Player player){
+        this.isWhite = player.isWhite;
+        this.position = player.position;
+        this.amountFences = player.amountFences;
+    }
+
     public boolean getIsPlayerWhite(){
         return this.isWhite;
     }
 
     public int getPossition() {
-        return this.possition;
+        return this.position;
     }
 
-    public void setPossition(int possition) {
-        this.possition = possition;
+    public void setPossition(int position) {
+        this.position = position;
     }
 
     public void useFence(){
@@ -26,5 +34,9 @@ public class Player {
 
     public int getAmountFences(){
         return this.amountFences;
+    }
+
+    public boolean hasFences(){
+        return (this.amountFences > 0);
     }
 }
