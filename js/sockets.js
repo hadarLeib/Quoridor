@@ -65,6 +65,7 @@ function openSocket() {
 
             writeResponse("" + obj.isLegal);
         }
+        
         else {
             //Not Json
             writeResponse(event.data);
