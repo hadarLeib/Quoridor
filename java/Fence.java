@@ -1,4 +1,4 @@
-public class Fence {
+public class Fence extends Move{
     private int firstId;
     private int secondId;
     private int a;

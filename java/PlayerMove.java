@@ -1,4 +1,4 @@
-public class PlayerMove {
+public class PlayerMove extends Move{
     private int oldPos;
     private int newPos;
 
