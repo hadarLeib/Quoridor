@@ -54,15 +54,19 @@ public class QuoridorServerEndpoint {
             c = obj.get("c").getAsInt();
             d = obj.get("d").getAsInt();
 
+            this.game.getBoard().removeEdge(a, b);
+            this.game.getBoard().removeEdge(c, d);
+
             isFenceLegal = this.game.getBoard().isValidFence(this.game.getCurrentPlayerPos(),
                     this.game.getCurrPlayer());
 
-            if (isFenceLegal) {
-                this.game.getBoard().removeEdge(a, b);
-                this.game.getBoard().removeEdge(c, d);
+            if (!isFenceLegal) {
+                this.game.getBoard().addEdge(a, b);
+                this.game.getBoard().addEdge(c, d);
             }
 
             innerObject.addProperty("isLegal", isFenceLegal);
+            
         }
 
         // Player move
@@ -80,6 +84,7 @@ public class QuoridorServerEndpoint {
             innerObject.addProperty("isLegal", isAdj);
         }
 
+        innerObject.addProperty("messageType", messageType);
         str = gson.toJson(innerObject);
 
         try {

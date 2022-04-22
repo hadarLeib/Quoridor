@@ -82,18 +82,25 @@ var Quoridor = new function () {
         switchPlayer();
     }
 
+var firstObjectSent;
+var secondObjectSent;
+
     function movePlayer(newPosition) {
         if (isPossibleMove(newPosition)) {
-            updatePlayerPosition(newPosition);
-            switchPlayer();
-            checkWinner();
+            firstObjectSent = this.currentTurn.pos;
+            secondObjectSent = newPosition
+            sendMove(firstObjectSent, secondObjectSent)
         }
+    }
+
+    movePlayerForReal = function(){
+        updatePlayerPosition(secondObjectSent);
+        switchPlayer();
+        checkWinner();
     }
 
     function isPossibleMove(newPosition) {
         var isLegal = true;
-        sendMove(this.currentTurn.pos, newPosition)
-
         return isLegal;
     }
 
@@ -179,15 +186,28 @@ var Quoridor = new function () {
 
     function placeFence(fence) {
         if (isFencePlaceable(fence)) {
-            updateGraphFence(fence);
+            firstObjectSent = fence;
+            setUpForSenendFence(fence);
+          
+        }
+    }
+
+     placeFenceForReal= function()
+    {
+        if(firstObjectSent!=null)
+        {
+            var fence = firstObjectSent;
             $(fence).addClass('placed');
             getAdjacentFence(fence).addClass('placed');
             this.currentTurn.fencesRemaining--;
             switchPlayer();
+            firstObjectSent = null;
         }
+
     }
 
-    function updateGraphFence(fence) {
+
+    function setUpForSenendFence(fence) {
         //vertical (a/b - c/d)
         // a | b
         // c | d

@@ -1,8 +1,12 @@
+import java.util.HashMap;
+
 public class Game {
     private Board board;
     private Player player1; // white - starts from low to high
     private Player player2; // black - starts from high to low
     private Player currentPlayer;
+    private HashMap<Integer, Fence> fencesInGame;
+
 
     Game() {
         this.board = new Board();
@@ -10,6 +14,7 @@ public class Game {
         this.player1 = new Player(4, true); // white - starts from low to high
         this.player2 = new Player(76, false); // black - starts from high to low
         this.currentPlayer = player1;
+        this.fencesInGame = new HashMap<Integer, Fence>();
     }
 
     public void switchPayer() {
@@ -75,9 +80,58 @@ public class Game {
                 break;
 
             default:
-                // System.out.println("checkIfLegalConsideringJump() says Regular move");
+                System.out.println("regular move");
         }
 
         return boardCopy.isAdj(oldPos, newPos);
+    }
+
+
+    //fence related functions
+
+    public HashMap<Integer, Fence> getfencesInGame(){
+        return this.fencesInGame;
+    }
+
+    public void addFenceToMap(int firstId, int secondId, boolean isHorizontal){
+        Fence fence = new Fence(firstId, secondId, isHorizontal);
+        this.fencesInGame.put(firstId, fence);
+        this.fencesInGame.put(secondId, fence);
+    }
+
+    public Fence getFenceById(int id){
+        return this.fencesInGame.get(id);
+    }
+
+    public boolean checkFenceLegal(int firstId, int secondId){
+        boolean isLegal;
+        //no fence on fence
+        isLegal = ((!this.fencesInGame.containsKey(firstId))&&(!this.fencesInGame.containsKey(secondId)));
+        
+        //no out of bounds
+        isLegal = (!(firstId % 17 == 16)) && (!(firstId > 135));
+
+        //no crossing fence
+        if(secondId-firstId == 1){ // horizontal fence
+            if(this.fencesInGame.containsKey(firstId - 8)){
+                if(this.fencesInGame.get(firstId - 8).getFirstId() == firstId - 8){
+                    isLegal = false;
+                }
+
+            }
+
+        }
+
+        // TO DO :
+        else{
+            if(this.fencesInGame.containsKey(firstId)){
+                if(this.fencesInGame.get(firstId).getFirstId() == firstId){
+                    isLegal = false;
+                }
+            }
+        }
+
+
+        return isLegal;
     }
 }

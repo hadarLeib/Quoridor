@@ -62,7 +62,7 @@ public class Board {
         // 72 is starting point for range 72 -> 80. possible end points for
         // player1(playerNo = true)
         // 0 for range 0 -> 8. possible end points for player2(playerNo = false)
-        int endPlayerPos = (currentPlayer.playerNo == true) ? 72 : 0;
+        int endPlayerPos = (currentPlayer.getIsPlayerWhite() == true) ? 72 : 0;
 
         // 9 possible endpoints.
         for (int i = 0; i < 9; i++) {

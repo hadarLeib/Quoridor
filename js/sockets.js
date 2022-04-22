@@ -32,6 +32,14 @@ function openSocket() {
 
         if (typeof obj == "object") {
             //Json
+
+            if(obj.isLegal==true)
+            {
+                if(obj.messageType == ("f"))
+                    placeFenceForReal();
+                else if(obj.messageType == ("m"))
+                    movePlayerForReal();
+            }
             writeResponse("" + obj.isLegal);
         }
         else {

@@ -1,17 +1,30 @@
 public class Player {
-    int possition;
-    boolean playerNo;
+    private int possition;
+    private boolean isWhite;
+    private int amountFences;
 
-    Player(int possition, boolean playerNo) {
-        this.playerNo = playerNo;
+    public Player(int possition, boolean playerNo) {
+        this.isWhite = playerNo;
         this.possition = possition;
+        this.amountFences = 10;
+    }
+    public boolean getIsPlayerWhite(){
+        return this.isWhite;
     }
 
-    int getPossition() {
+    public int getPossition() {
         return this.possition;
     }
 
-    void setPossition(int possition) {
+    public void setPossition(int possition) {
         this.possition = possition;
+    }
+
+    public void useFence(){
+        this.amountFences--;
+    }
+
+    public int getAmountFences(){
+        return this.amountFences;
     }
 }
