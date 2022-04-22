@@ -56,7 +56,10 @@ function openSocket() {
             }
 
             else if(obj.messageType == "m"){
-                movePlayerForReal();
+                if(obj.isLegal == true)
+                    movePlayerForReal();
+                else
+                    alert("Can't jump to there")
             }
 
 
