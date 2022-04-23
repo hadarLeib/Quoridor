@@ -3,6 +3,7 @@ public class PlayerMove extends Move{
     private int newPos;
 
     public PlayerMove(int oldPos, int newPos){
+        super("m");
         this.oldPos = oldPos;
         this.newPos = newPos;
     }

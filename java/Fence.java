@@ -7,7 +7,9 @@ public class Fence extends Move{
     private int d;
     private boolean isHorizontal;
 
+    
     public Fence(int firstId, int secondId, boolean isHorizontal, int a, int b, int c, int d){
+        super("f");
         this.firstId = firstId;
         this.secondId = secondId;
         this.a = a;

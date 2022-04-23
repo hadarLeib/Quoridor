@@ -110,17 +110,16 @@ public class Game {
         return this.fencesInGame;
     }
 
-    public void addFenceToMap(int firstId, int secondId, int a, int b, int c, int d, boolean isHorizontal){
-        Fence fence = new Fence(firstId, secondId, isHorizontal, a, b, c, d);
-        this.fencesInGame.put(firstId, fence);
-        this.fencesInGame.put(secondId, fence);
+    public void addFenceToMap(Fence fence){
+        this.fencesInGame.put(fence.getFirstId(), fence);
+        this.fencesInGame.put(fence.getSecondId(), fence);
     }
 
     public Fence getFenceById(int id){
         return this.fencesInGame.get(id);
     }
 
-    public int checkFenceLegal(int firstId, int secondId, int aSquare, int bSquare, int cSquare, int dSquare){
+    public int checkFenceLegal(Fence fence){
         /*
             returns 1 if move is legal
             returns 2 if a fence is placed on another fence (either parallel or cross)
@@ -131,14 +130,14 @@ public class Game {
         int errorType = 1; 
 
         //no fence on fence - parallel
-        if ((this.fencesInGame.containsKey(firstId))||(this.fencesInGame.containsKey(secondId))){
+        if ((this.fencesInGame.containsKey(fence.getFirstId()))||(this.fencesInGame.containsKey(fence.getSecondId()))){
             errorType = 2;
         }
 
         //no fence on fence - cross
-        if(secondId-firstId == 1){ // horizontal fence
-            if(this.fencesInGame.containsKey(firstId - 8)){
-                if(this.fencesInGame.get(firstId - 8).getFirstId() == (firstId - 8)){
+        if(fence.getIsHorizontal()){ // horizontal fence
+            if(this.fencesInGame.containsKey(fence.getFirstId() - 8)){
+                if(this.fencesInGame.get(fence.getFirstId() - 8).getFirstId() == (fence.getFirstId() - 8)){
                     errorType = 2;
                 }
 
@@ -147,21 +146,21 @@ public class Game {
         }
 
         else{ // vertical fence
-            if(this.fencesInGame.containsKey(firstId + 8)){
-                if(this.fencesInGame.get(firstId + 8).getFirstId() == (firstId + 8)){
+            if(this.fencesInGame.containsKey(fence.getFirstId() + 8)){
+                if(this.fencesInGame.get(fence.getFirstId() + 8).getFirstId() == (fence.getFirstId() + 8)){
                     errorType = 2;
                 }
             }
         }
         
         //no out of bounds
-        if((firstId % 17 == 16) || (firstId > 135)){
+        if((fence.getFirstId() % 17 == 16) || (fence.getFirstId() > 135)){
             errorType = 3;
         }
 
         //setup for dfs check
-        this.getBoard().addEdge(aSquare, bSquare);
-        this.getBoard().addEdge(cSquare, dSquare);
+        this.getBoard().addEdge(fence.getA(), fence.getB());
+        this.getBoard().addEdge(fence.getC(), fence.getD());
 
         //player cant get across
         if(!this.getBoard().playerCanGetToEnd(this.getCurrentPlayerPos(), this.getCurrPlayer())){
@@ -169,9 +168,27 @@ public class Game {
         }
 
         //edges are no longer relavent
-        this.getBoard().removeEdge(aSquare, bSquare);
-        this.getBoard().removeEdge(cSquare, dSquare);
+        this.getBoard().removeEdge(fence.getA(), fence.getB());
+        this.getBoard().removeEdge(fence.getC(), fence.getD());
 
         return errorType;
+    }
+
+
+
+
+
+
+    public void doMove(Move move){
+        if(move.moveType.equals("m")){
+            setPlayerPos(getCurrPlayer(), ((PlayerMove)move).getPlayerNewPos());
+            switchPayer();
+        }
+        else if(move.moveType.equals("f")){
+            addFenceToMap(((Fence)move));
+            getCurrPlayer().useFence();
+            switchPayer();
+        }
+
     }
 }

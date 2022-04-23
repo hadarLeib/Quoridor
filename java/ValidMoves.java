@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public class ValidMoves {
     private List <Fence> validFenceMoves;
     private List <PlayerMove> validPlayerMoves;
+    private List <Move> validMoves;
     
 
     private int AMOUNT_SQUARES_ON_BOARD;
@@ -17,10 +18,13 @@ public class ValidMoves {
     public ValidMoves(){
         validFenceMoves = new ArrayList<Fence>();
         validPlayerMoves = new ArrayList<PlayerMove>();
+        validMoves = new ArrayList<Move>();
 
         //constants
         AMOUNT_SQUARES_ON_BOARD = 81;
         MAX_POSSIBLE_FENCE_ID = 134;
+
+        
     }
 
     public List <Fence> getValidFenceMovesLis(){
@@ -31,13 +35,46 @@ public class ValidMoves {
         return this.validPlayerMoves;
     }
 
-    public void addPlayerMoveToValidPlayerMoveList(int oldPos, int newPos){
-        PlayerMove newMove = new PlayerMove(oldPos, newPos);
-        this.validPlayerMoves.add(newMove);
+    public List <Move> getValidMovesList(Game game, int playerPosition){
+        this.validMoves.clear();
+
+        // adding player moves
+        for(int i = 0; i < AMOUNT_SQUARES_ON_BOARD; i++){
+            if(game.checkIfLegalConsideringJump(playerPosition, i)){
+                PlayerMove playerMove = new PlayerMove(playerPosition, i);
+                addMoveToValidMovesList(playerMove);
+
+            }
+
+        }
+
+        // adding fence moves
+        for(int i = 0; i < MAX_POSSIBLE_FENCE_ID; i++){
+            getCurrABCD(i);
+            
+            Fence fence = new Fence(i, getSecondId(i), isFenceHorizontal(i), CURRENT_A, CURRENT_B, CURRENT_C, CURRENT_D);
+            if(game.checkFenceLegal(fence) == 1){
+                
+                addMoveToValidMovesList(fence);
+            }
+
+        }
+
+        return this.validMoves;
+
+    }
+
+    public void addPlayerMoveToValidPlayerMoveList(PlayerMove playerMove){
+        this.validPlayerMoves.add(playerMove);
     }
 
     public void addFenceMoveToValidFenceMoveList(Fence fence){
         this.validFenceMoves.add(fence);
+    }
+
+    public void addMoveToValidMovesList(Move move){
+        this.validMoves.add(move);
+        
     }
 
     public void createValidPlayerMovesList(Game game, int playerPosition){
@@ -49,7 +86,11 @@ public class ValidMoves {
         //iterates over possible fence IDs and checks where a fence can be placed
         for(int i = 0; i < AMOUNT_SQUARES_ON_BOARD; i++){
             if(game.checkIfLegalConsideringJump(playerPosition, i)){
-                addPlayerMoveToValidPlayerMoveList(playerPosition, i);
+                PlayerMove playerMove = new PlayerMove(playerPosition, i);
+                //addPlayerMoveToValidPlayerMoveList(playerMove);
+                //Move move = new Move("m");
+                //playerMove = ((PlayerMove)move);
+                addMoveToValidMovesList(playerMove);
 
             }
 
@@ -67,9 +108,12 @@ public class ValidMoves {
         //iterates over all squares on the board and checks which are possible to jump to from cuurent position
         for(int i = 0; i < MAX_POSSIBLE_FENCE_ID; i++){
             getCurrABCD(i);
+            
             Fence fence = new Fence(i, getSecondId(i), isFenceHorizontal(i), CURRENT_A, CURRENT_B, CURRENT_C, CURRENT_D);
-            if(game.checkFenceLegal(i, getSecondId(i), CURRENT_A, CURRENT_B, CURRENT_C, CURRENT_D) == 1){
-                addFenceMoveToValidFenceMoveList(fence);
+            if(game.checkFenceLegal(fence) == 1){
+                
+                //addFenceMoveToValidFenceMoveList(fence);
+                addMoveToValidMovesList(fence);
             }
 
         }

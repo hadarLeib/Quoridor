@@ -1,7 +1,7 @@
 public class Minimax {
 
     int depth;
-    int bestMove; // if fence - first id of fence, if movement - new position
+    Move bestMove; // if fence - first id of fence, if movement - new position
     String bestMoveType; // "f" for fence, "p" for movement
     
     public Minimax(int depth){
@@ -16,6 +16,9 @@ public class Minimax {
         //else - next move is closest move to end
     }
 
+
+
+
     //should get game copy!!!!
     public int minimaxWithAlphaBetaWithVal(Game game, int depth, int alpha, int beta, boolean maxPlayer){
 
@@ -26,22 +29,16 @@ public class Minimax {
         if(maxPlayer){
             int val;
             ValidMoves validMoves = new ValidMoves();
-
-            validMoves.createValidFenceMovesList(game);
-            validMoves.createValidPlayerMovesList(game, game.getCurrentPlayerPos());
             
-            for(PlayerMove move:validMoves.getValidPlayerMovesList()){
+            for(Move move:validMoves.getValidMovesList(game, game.getCurrentPlayerPos())){
 
                 Game child = new Game(game);
-                child.setPlayerPos(game.getCurrPlayer(), move.getPlayerNewPos());
-                child.switchPayer();
-
+                child.doMove(move);
                 val = minimaxWithAlphaBeta(child, (depth - 1), alpha, beta, false);
 
                 if (val > alpha) {
                     alpha = val;
-                    this.bestMove = move.getPlayerNewPos();
-                    this.bestMoveType = "m";
+                    this.bestMove = move;
                 }
                 if (beta <= alpha) {
                     break;
@@ -52,16 +49,11 @@ public class Minimax {
 
         else{
             ValidMoves validMoves = new ValidMoves();
-
-            validMoves.createValidFenceMovesList(game);
-            validMoves.createValidPlayerMovesList(game, game.getCurrentPlayerPos());
             
-            for(PlayerMove move:validMoves.getValidPlayerMovesList()){
+            for(Move move:validMoves.getValidMovesList(game, game.getCurrentPlayerPos())){
 
                 Game child = new Game(game);
-                child.setPlayerPos(game.getCurrPlayer(), move.getPlayerNewPos());
-                child.switchPayer();
-
+                child.doMove(move);
                 beta = Math.max(beta, minimaxWithAlphaBeta(child, (depth - 1), alpha, beta, true));
 
                 if(beta <= alpha)
@@ -73,6 +65,9 @@ public class Minimax {
     }
 
     
+
+
+    
     public int minimaxWithAlphaBeta(Game game, int depth, int alpha, int beta, boolean maxPlayer){
 
         if(depth == 0){ // or game is over - TO DO
@@ -81,45 +76,40 @@ public class Minimax {
 
         if(maxPlayer){
             ValidMoves validMoves = new ValidMoves();
-
-            validMoves.createValidFenceMovesList(game);
-            validMoves.createValidPlayerMovesList(game, game.getCurrentPlayerPos());
             
-            for(PlayerMove move:validMoves.getValidPlayerMovesList()){
+            for(Move move:validMoves.getValidMovesList(game, game.getCurrentPlayerPos())){
 
                 Game child = new Game(game);
-                child.setPlayerPos(game.getCurrPlayer(), move.getPlayerNewPos());
-                child.switchPayer();
+                child.doMove(move);
+                alpha = Math.max(alpha, minimaxWithAlphaBeta(child, depth-1, alpha, beta, false));
 
-                alpha = Math.max(alpha, minimaxWithAlphaBeta(child, (depth - 1), alpha, beta, false));
-
-                if(beta <= alpha)
+                if (beta <= alpha) {
                     break;
+                }
             }
             return alpha;
         }
 
         else{
             ValidMoves validMoves = new ValidMoves();
-
-            validMoves.createValidFenceMovesList(game);
-            validMoves.createValidPlayerMovesList(game, game.getCurrentPlayerPos());
             
-            for(PlayerMove move:validMoves.getValidPlayerMovesList()){
+            for(Move move:validMoves.getValidMovesList(game, game.getCurrentPlayerPos())){
 
                 Game child = new Game(game);
-                child.setPlayerPos(game.getCurrPlayer(), move.getPlayerNewPos());
-                child.switchPayer();
-
-                beta = Math.max(beta, minimaxWithAlphaBeta(child, (depth - 1), alpha, beta, true));
-
-                if(beta <= alpha)
+                child.doMove(move);
+                beta = Math.min(beta, minimaxWithAlphaBeta(child, depth-1, alpha, beta, true));
+                
+                if (beta <= alpha) {
                     break;
+                }
             }
             return beta;
         }
-
     }
+
+
+
+
 
     public int heuristic(Game game){// shortest path difference
 

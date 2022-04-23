@@ -58,9 +58,11 @@ public class QuoridorServerEndpoint {
             secondFenceId = obj.get("secondId").getAsInt();
             fenceType = obj.get("fType").getAsString();
 
-            fenceLegalErrorType = this.game.checkFenceLegal(firstFenceId, secondFenceId, a, b, c, d);
+            Fence fence = new Fence(firstFenceId, secondFenceId, (fenceType.equals("h")), a, b, c, d);
+            fenceLegalErrorType = this.game.checkFenceLegal(fence);
             if(fenceLegalErrorType == 1){ // no errors - legal fence move
-                this.game.addFenceToMap(firstFenceId, secondFenceId, a, b, c, d, (fenceType.equals("h")));
+                
+                this.game.addFenceToMap(fence);
                 this.game.getCurrPlayer().useFence();
                 this.game.switchPayer();
             }
