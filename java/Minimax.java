@@ -2,19 +2,22 @@ public class Minimax {
 
     int depth;
     Move bestMove; // if fence - first id of fence, if movement - new position
-    String bestMoveType; // "f" for fence, "m" for movement
     
     public Minimax(int depth){
         this.depth = depth;
     }
 
-    public void bestMoveCalc(Game game){
+    public Move bestMoveCalc(Game game){
         if(game.getCurrPlayer().hasFences()){
             Game gameCopy = new Game(game);
             minimaxWithAlphaBetaWithVal(gameCopy, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
         }
+        else{
+            this.bestMove = new PlayerMove(game.getCurrentPlayerPos(), game.shortestPathToRow(game.getCurrentPlayerPos(), 0).get(0));
+        }
 
-        //else - next move is closest move to end
+
+        return this.bestMove;
     }
 
 
@@ -111,6 +114,7 @@ public class Minimax {
 
     public int heuristic(Game game){// shortest path difference
 
-        return 0;
+        return game.shortestPathToRow(game.getPlayerTwo().getPossition(), 0).size()
+        -game.shortestPathToRow(game.getPlayerOne().getPossition(), 8).size();
     }
 }

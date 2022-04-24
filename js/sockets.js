@@ -62,10 +62,12 @@ function openSocket() {
                     alert("Can't jump to there")
             }
 
+            //else if(obj.messageType == "i")
+
 
             writeResponse("" + obj.isLegal);
         }
-        
+
         else {
             //Not Json
             writeResponse(event.data);
@@ -90,13 +92,18 @@ function send() {
     webSocket.send(JSON.stringify(obj));
 }
 
+function sendAi(){
+    var obj = { type: "i"};
+    webSocket.send(JSON.stringify(obj));
+}
+
 function sendFence(fenceId, nextFenceId, a, b, c, d, fType) {
     var obj = { type: "f", firstId: fenceId, secondId: nextFenceId, a: a, b: b, c: c, d: d, fType: fType };
     webSocket.send(JSON.stringify(obj));
 }
 
 function sendMove(oldPos, newPos) {
-    var obj = { type: "m", oldPos: oldPos, newPos: newPos }
+    var obj = { type: "m", oldPos: oldPos, newPos: newPos };
     webSocket.send(JSON.stringify(obj));
 }
 

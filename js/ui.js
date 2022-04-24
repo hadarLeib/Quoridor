@@ -77,9 +77,9 @@ var Quoridor = new function () {
         currentTurn = this.player1;
 
         updatePlayerPosition(this.currentTurn.pos);
-        switchPlayer();
+        switchPlayerFirst();
         updatePlayerPosition(this.currentTurn.pos);
-        switchPlayer();
+        switchPlayerFirst();
     }
 
 var firstObjectSent;
@@ -262,12 +262,30 @@ var secondObjectSent;
         }
     }
 
-    function switchPlayer() {
+    function switchPlayerFirst() {
         if (this.currentTurn == this.player1) {
             this.currentTurn = this.player2;
+            
         }
         else {
             this.currentTurn = this.player1;
+            
+        }
+        updateInformation();
+    }
+
+    function switchPlayer() {
+        if (this.currentTurn == this.player1) {
+            this.currentTurn = this.player2;
+            //updateInformation();
+            // ai turn:
+            
+            //sendAi();
+            
+        }
+        else {
+            this.currentTurn = this.player1;
+            
         }
         updateInformation();
     }

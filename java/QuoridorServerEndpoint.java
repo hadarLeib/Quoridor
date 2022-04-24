@@ -86,6 +86,27 @@ public class QuoridorServerEndpoint {
             innerObject.addProperty("isLegal", isAdj);
         }
 
+        else if(messageType.equals("i")){
+            Minimax minimaxAlphaBeta = new Minimax(1);
+            Move move = new Move();
+            move = minimaxAlphaBeta.bestMoveCalc(this.game);
+
+            if(move.getMoveType().equals("f")){
+
+                this.game.addFenceToMap(((Fence)move));
+                this.game.getCurrPlayer().useFence();
+                this.game.switchPayer();
+            }
+
+            else{
+                this.game.setPlayerPos(this.game.getCurrPlayer(), ((PlayerMove)move).getPlayerNewPos());
+                this.game.switchPayer();
+            }
+
+            innerObject.addProperty("isLegal", true);
+
+        }
+
         innerObject.addProperty("messageType", messageType);
         str = gson.toJson(innerObject);
 

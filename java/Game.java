@@ -26,6 +26,7 @@ public class Game {
         this.player1 = new Player(game.getPlayerOne());
         this.player2 = new Player(game.getPlayerTwo());
         this.currentPlayer = game.getCurrPlayer();
+        this.fencesInGame = new HashMap<Integer, Fence>();
         this.fencesInGame.putAll(game.getfencesInGame());
     }
 
