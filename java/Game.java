@@ -101,7 +101,7 @@ public class Game {
                 break;
 
             default:
-                System.out.println("regular move");
+                // System.out.println("regular move");
         }
 
         return boardCopy.isAdj(oldPos, newPos);
