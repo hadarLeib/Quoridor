@@ -2,7 +2,7 @@ public class Minimax {
 
     int depth;
     Move bestMove; // if fence - first id of fence, if movement - new position
-    String bestMoveType; // "f" for fence, "p" for movement
+    String bestMoveType; // "f" for fence, "m" for movement
     
     public Minimax(int depth){
         this.depth = depth;
