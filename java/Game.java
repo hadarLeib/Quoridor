@@ -175,6 +175,9 @@ public class Game {
     }
 
 
+    public boolean isOver(){
+        return(this.player1.getPossition() > 71 || this.player2.getPossition() < 9);
+    }
 
 
 

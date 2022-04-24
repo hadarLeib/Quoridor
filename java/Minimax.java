@@ -10,19 +10,17 @@ public class Minimax {
 
     public void bestMoveCalc(Game game){
         if(game.getCurrPlayer().hasFences()){
-            minimaxWithAlphaBetaWithVal(game, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+            Game gameCopy = new Game(game);
+            minimaxWithAlphaBetaWithVal(gameCopy, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
         }
 
         //else - next move is closest move to end
     }
 
 
-
-
-    //should get game copy!!!!
     public int minimaxWithAlphaBetaWithVal(Game game, int depth, int alpha, int beta, boolean maxPlayer){
 
-        if(depth == 0){ // or game is over - TO DO
+        if(depth == 0 || game.isOver()){
             return heuristic(game);
         }
 
@@ -70,7 +68,7 @@ public class Minimax {
     
     public int minimaxWithAlphaBeta(Game game, int depth, int alpha, int beta, boolean maxPlayer){
 
-        if(depth == 0){ // or game is over - TO DO
+        if(depth == 0 || game.isOver()){ 
             return heuristic(game);
         }
 

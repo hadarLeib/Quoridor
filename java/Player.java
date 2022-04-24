@@ -3,6 +3,7 @@ public class Player {
     private boolean isWhite;
     private int amountFences;
 
+    // constructor
     public Player(int possition, boolean isWhite) {
         this.isWhite = isWhite;
         this.position = possition;
