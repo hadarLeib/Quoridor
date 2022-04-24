@@ -60,16 +60,15 @@ public class QuoridorServerEndpoint {
 
             Fence fence = new Fence(firstFenceId, secondFenceId, (fenceType.equals("h")), a, b, c, d);
             fenceLegalErrorType = this.game.checkFenceLegal(fence);
-            if(fenceLegalErrorType == 1){ // no errors - legal fence move
-                
+            if (fenceLegalErrorType == 1) { // no errors - legal fence move
+
                 this.game.addFenceToMap(fence);
                 this.game.getCurrPlayer().useFence();
                 this.game.switchPayer();
             }
 
-            innerObject.addProperty("isLegal", (fenceLegalErrorType==1)); // if returns one, no errors
+            innerObject.addProperty("isLegal", (fenceLegalErrorType == 1)); // if returns one, no errors
             innerObject.addProperty("errorType", fenceLegalErrorType);
-            
         }
 
         // Player move

@@ -1,4 +1,8 @@
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Collections;
+import java.util.Queue;
 
 public class Game {
     private Board board;
@@ -6,7 +10,6 @@ public class Game {
     private Player player2; // black - starts from high to low
     private Player currentPlayer;
     private HashMap<Integer, Fence> fencesInGame;
-
 
     public Game() {
         this.board = new Board();
@@ -18,7 +21,7 @@ public class Game {
     }
 
     // copy constructor
-    public Game(Game game){
+    public Game(Game game) {
         this.board = new Board(game.getBoard());
         this.player1 = new Player(game.getPlayerOne());
         this.player2 = new Player(game.getPlayerTwo());
@@ -26,11 +29,11 @@ public class Game {
         this.fencesInGame.putAll(game.getfencesInGame());
     }
 
-    public Player getPlayerOne(){
+    public Player getPlayerOne() {
         return this.player1;
     }
 
-    public Player getPlayerTwo(){
+    public Player getPlayerTwo() {
         return this.player2;
     }
 
@@ -103,41 +106,42 @@ public class Game {
         return boardCopy.isAdj(oldPos, newPos);
     }
 
+    // fence related functions
 
-    //fence related functions
-
-    public HashMap<Integer, Fence> getfencesInGame(){
+    public HashMap<Integer, Fence> getfencesInGame() {
         return this.fencesInGame;
     }
 
-    public void addFenceToMap(Fence fence){
+    public void addFenceToMap(Fence fence) {
         this.fencesInGame.put(fence.getFirstId(), fence);
         this.fencesInGame.put(fence.getSecondId(), fence);
     }
 
-    public Fence getFenceById(int id){
+    public Fence getFenceById(int id) {
         return this.fencesInGame.get(id);
     }
 
-    public int checkFenceLegal(Fence fence){
+    public int checkFenceLegal(Fence fence) {
         /*
-            returns 1 if move is legal
-            returns 2 if a fence is placed on another fence (either parallel or cross)
-            returns 3 if fence is placed out of bounds
-            returns 4 if placing the fence will create a situation in which a player is completely blocked
-        */
+         * returns 1 if move is legal
+         * returns 2 if a fence is placed on another fence (either parallel or cross)
+         * returns 3 if fence is placed out of bounds
+         * returns 4 if placing the fence will create a situation in which a player is
+         * completely blocked
+         */
 
-        int errorType = 1; 
+        int errorType = 1;
 
-        //no fence on fence - parallel
-        if ((this.fencesInGame.containsKey(fence.getFirstId()))||(this.fencesInGame.containsKey(fence.getSecondId()))){
+        // no fence on fence - parallel
+        if ((this.fencesInGame.containsKey(fence.getFirstId()))
+                || (this.fencesInGame.containsKey(fence.getSecondId()))) {
             errorType = 2;
         }
 
-        //no fence on fence - cross
-        if(fence.getIsHorizontal()){ // horizontal fence
-            if(this.fencesInGame.containsKey(fence.getFirstId() - 8)){
-                if(this.fencesInGame.get(fence.getFirstId() - 8).getFirstId() == (fence.getFirstId() - 8)){
+        // no fence on fence - cross
+        if (fence.getIsHorizontal()) { // horizontal fence
+            if (this.fencesInGame.containsKey(fence.getFirstId() - 8)) {
+                if (this.fencesInGame.get(fence.getFirstId() - 8).getFirstId() == (fence.getFirstId() - 8)) {
                     errorType = 2;
                 }
 
@@ -145,53 +149,86 @@ public class Game {
 
         }
 
-        else{ // vertical fence
-            if(this.fencesInGame.containsKey(fence.getFirstId() + 8)){
-                if(this.fencesInGame.get(fence.getFirstId() + 8).getFirstId() == (fence.getFirstId() + 8)){
+        else { // vertical fence
+            if (this.fencesInGame.containsKey(fence.getFirstId() + 8)) {
+                if (this.fencesInGame.get(fence.getFirstId() + 8).getFirstId() == (fence.getFirstId() + 8)) {
                     errorType = 2;
                 }
             }
         }
-        
-        //no out of bounds
-        if((fence.getFirstId() % 17 == 16) || (fence.getFirstId() > 135)){
+
+        // no out of bounds
+        if ((fence.getFirstId() % 17 == 16) || (fence.getFirstId() > 135)) {
             errorType = 3;
         }
 
-        //setup for dfs check
+        // setup for dfs check
         this.getBoard().addEdge(fence.getA(), fence.getB());
         this.getBoard().addEdge(fence.getC(), fence.getD());
 
-        //player cant get across
-        if(!this.getBoard().playerCanGetToEnd(this.getCurrentPlayerPos(), this.getCurrPlayer())){
+        // player cant get across
+        if (!this.getBoard().playerCanGetToEnd(this.getCurrentPlayerPos(), this.getCurrPlayer())) {
             errorType = 4;
         }
 
-        //edges are no longer relavent
+        // edges are no longer relavent
         this.getBoard().removeEdge(fence.getA(), fence.getB());
         this.getBoard().removeEdge(fence.getC(), fence.getD());
 
         return errorType;
     }
 
-
-    public boolean isOver(){
-        return(this.player1.getPossition() > 71 || this.player2.getPossition() < 9);
+    public boolean isOver() {
+        return (this.player1.getPossition() > 71 || this.player2.getPossition() < 9);
     }
 
-
-
-
-    public void doMove(Move move){
-        if(move.moveType.equals("m")){
-            setPlayerPos(getCurrPlayer(), ((PlayerMove)move).getPlayerNewPos());
+    public void doMove(Move move) {
+        if (move.moveType.equals("m")) {
+            setPlayerPos(getCurrPlayer(), ((PlayerMove) move).getPlayerNewPos());
             switchPayer();
-        }
-        else if(move.moveType.equals("f")){
-            addFenceToMap(((Fence)move));
+        } else if (move.moveType.equals("f")) {
+            addFenceToMap(((Fence) move));
             getCurrPlayer().useFence();
             switchPayer();
         }
+    }
 
+    public List<Integer> shortestPathToRow(int src, int row) {
+        List<Integer> path = new LinkedList<>();
+        Queue<Integer> queue = new LinkedList<>();
+        HashMap<Integer, Integer> parentNode = new HashMap<>();
+
+        // enqueue start configuration onto queue
+        queue.add(src);
+        // mark start configuration
+        parentNode.put(src, null);
+        // Get game board of the current game
+        boolean[][] gameBoard = this.getBoard().adjMatrix;
+
+        while (!queue.isEmpty()) {
+            int t = queue.poll();
+            int t_row = t / 9; // Get row by position
+            if (t_row == row) {
+                while (t != src) {
+                    path.add(t);
+                    t = parentNode.get(t);
+                }
+
+                Collections.reverse(path);
+                return path;
+            }
+
+            for (int i = 0; i < gameBoard[0].length; i++) {
+                // Get current pos on board by row and col
+                int cur_pos = t * 9 + i;
+
+                if (!parentNode.containsKey(cur_pos)) {
+                    parentNode.put(cur_pos, t);
+                    queue.add(cur_pos);
+                }
+            }
+        }
+
+        return path;
     }
 }
