@@ -82,8 +82,8 @@ var Quoridor = new function () {
         switchPlayerFirst();
     }
 
-var firstObjectSent;
-var secondObjectSent;
+    var firstObjectSent;
+    var secondObjectSent;
 
     function movePlayer(newPosition) {
         if (isPossibleMove(newPosition)) {
@@ -93,7 +93,7 @@ var secondObjectSent;
         }
     }
 
-    movePlayerForReal = function(){
+    movePlayerForReal = function () {
         updatePlayerPosition(secondObjectSent);
         switchPlayer();
         checkWinner();
@@ -189,10 +189,8 @@ var secondObjectSent;
         setUpForSenendFence(fence);
     }
 
-     placeFenceForReal= function()
-    {
-        if(firstObjectSent!=null)
-        {
+    placeFenceForReal = function () {
+        if (firstObjectSent != null) {
             var fence = firstObjectSent;
             $(fence).addClass('placed');
             getAdjacentFence(fence).addClass('placed');
@@ -265,11 +263,11 @@ var secondObjectSent;
     function switchPlayerFirst() {
         if (this.currentTurn == this.player1) {
             this.currentTurn = this.player2;
-            
+
         }
         else {
             this.currentTurn = this.player1;
-            
+
         }
         updateInformation();
     }
@@ -277,16 +275,15 @@ var secondObjectSent;
     function switchPlayer() {
         if (this.currentTurn == this.player1) {
             this.currentTurn = this.player2;
-            //updateInformation();
             // ai turn:
-            
-            //sendAi();
-            
+            updateInformation();
+            sendAi();
+
         }
         else {
             this.currentTurn = this.player1;
-            
         }
+
         updateInformation();
     }
 };
