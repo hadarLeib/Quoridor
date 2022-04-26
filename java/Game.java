@@ -49,7 +49,7 @@ public class Game {
         return this.board;
     }
 
-    Player getCurrPlayer() {
+    public Player getCurrPlayer() {
         return this.currentPlayer;
     }
 
@@ -184,10 +184,10 @@ public class Game {
     }
 
     public void doMove(Move move) {
-        if (move.moveType.equals("m")) {
+        if (move.getMoveType().equals("m")) {
             setPlayerPos(getCurrPlayer(), ((PlayerMove) move).getPlayerNewPos());
             switchPayer();
-        } else if (move.moveType.equals("f")) {
+        } else if (move.getMoveType().equals("f")) {
             addFenceToMap(((Fence) move));
             getCurrPlayer().useFence();
             switchPayer();
@@ -204,7 +204,7 @@ public class Game {
         // mark start configuration
         parentNode.put(src, null);
         // Get game board of the current game
-        boolean[][] gameBoard = this.getBoard().adjMatrix;
+        boolean[][] gameBoard = this.getBoard().getAdjacentMatrix();
 
         while (!queue.isEmpty()) {
             int t = queue.poll();

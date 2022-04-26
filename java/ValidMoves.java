@@ -2,8 +2,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class ValidMoves {
-    private List<Fence> validFenceMoves;
-    private List<PlayerMove> validPlayerMoves;
     private List<Move> validMoves;
 
     private int AMOUNT_SQUARES_ON_BOARD;
@@ -33,20 +31,24 @@ public class ValidMoves {
                 this.addMoveToValidMovesList(playerMove);
             }
         }
-
+        
+/*
         // adding fence moves
+        int count = 0;
         for (int i = 0; i < MAX_POSSIBLE_FENCE_ID; i++) {
             this.getCurrABCD(i);
 
             Fence fence = new Fence(i, getSecondId(i), isFenceHorizontal(i),
                     this.CURRENT_A, this.CURRENT_B,
-                    this.CURRENT_C,
-                    this.CURRENT_D);
+                    this.CURRENT_C, this.CURRENT_D);
 
+                    
             if (game.checkFenceLegal(fence) == 1) {
+                count ++;
                 addMoveToValidMovesList(fence);
             }
         }
+        System.out.println(count);*/
 
         return this.validMoves;
     }
@@ -66,18 +68,26 @@ public class ValidMoves {
     }
 
     public void getCurrABCD(int firstId) {
+
+        int row = firstId / 17;
+        int col = (firstId - 9 * row) % 8;
+        
         if (isFenceHorizontal(firstId)) {
-            CURRENT_A = firstId - (8 * (firstId / 17) - 8);
-            CURRENT_B = CURRENT_A + 9;
-            CURRENT_C = CURRENT_A + 1;
-            CURRENT_D = CURRENT_B + 1;
+            // System.out.println("row: " + firstId + " / 17 + " + row);
+            // System.out.println("col: " + "(" + firstId + " - 9 * row) % 8 = " + col);
+            this.CURRENT_A = col + row * 9;
+            this.CURRENT_B = this.CURRENT_A + 9;
+            this.CURRENT_C = this.CURRENT_A + 1;
+            this.CURRENT_D = this.CURRENT_B + 1;
         }
 
         else {
-            CURRENT_A = firstId - (8 * (firstId / 17));
-            CURRENT_B = CURRENT_A + 1;
-            CURRENT_C = getSecondId(firstId) - (8 * (getSecondId(firstId) / 17));
-            CURRENT_D = CURRENT_C + 1;
+            // System.out.println("row: " + firstId + " / 17 + " + row);
+            // System.out.println("col: " + "(" + firstId + " - 9 * row) % 8 = " + col);
+            this.CURRENT_A = col + row * 9;
+            this.CURRENT_B = this.CURRENT_A + 1;
+            this.CURRENT_C = this.CURRENT_A + 9;
+            this.CURRENT_D = this.CURRENT_C + 1;
         }
     }
 

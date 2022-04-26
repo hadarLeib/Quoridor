@@ -189,6 +189,22 @@ var Quoridor = new function () {
         setUpForSenendFence(fence);
     }
 
+    aiPlaceFence = function(id){
+        var fence = $("#" + id);
+        $(fence).addClass('placed');
+        getAdjacentFence(fence).addClass('placed');
+        this.currentTurn.fencesRemaining--;
+        switchPlayer();
+
+    }
+
+    aiMovePlayer = function(position){
+
+        updatePlayerPosition(position);
+        switchPlayer();
+        checkWinner();
+    }
+
     placeFenceForReal = function () {
         if (firstObjectSent != null) {
             var fence = firstObjectSent;
@@ -282,9 +298,11 @@ var Quoridor = new function () {
         }
         else {
             this.currentTurn = this.player1;
+
         }
 
         updateInformation();
+        
     }
 };
 

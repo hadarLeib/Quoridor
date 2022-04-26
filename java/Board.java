@@ -1,6 +1,6 @@
 public class Board {
-    public int vertices;
-    public boolean adjMatrix[][];
+    private int vertices;
+    private boolean adjMatrix[][];
 
     // Default constructor
     public Board() {
@@ -18,6 +18,10 @@ public class Board {
                 this.adjMatrix[i][j] = board.adjMatrix[i][j];
             }
         }
+    }
+
+    public boolean[][] getAdjacentMatrix(){
+        return this.adjMatrix;
     }
 
     public void addEdge(int source, int destination) {

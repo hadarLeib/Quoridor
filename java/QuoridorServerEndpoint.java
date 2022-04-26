@@ -87,7 +87,7 @@ public class QuoridorServerEndpoint {
         }
 
         else if (messageType.equals("i")) {
-            Minimax minimaxAlphaBeta = new Minimax(1);
+            Minimax minimaxAlphaBeta = new Minimax(2);
             Move move = new Move();
             move = minimaxAlphaBeta.bestMoveCalc(this.game);
 
@@ -96,11 +96,17 @@ public class QuoridorServerEndpoint {
                 this.game.addFenceToMap(((Fence) move));
                 this.game.getCurrPlayer().useFence();
                 this.game.switchPayer();
+                //innerObject.addProperty("aiMoveType", "f");
+                //innerObject.addProperty("fenceID", ((Fence)move).getFirstId());
+
             }
 
-            else {
+            else if (move.getMoveType().equals("m")) {
                 this.game.setPlayerPos(this.game.getCurrPlayer(), ((PlayerMove) move).getPlayerNewPos());
                 this.game.switchPayer();
+                innerObject.addProperty("aiMoveType", "m");
+                innerObject.addProperty("oldPos", ((PlayerMove)move).getPlayerOldPos());
+                innerObject.addProperty("newPos", ((PlayerMove)move).getPlayerNewPos());
             }
 
             innerObject.addProperty("isLegal", true);

@@ -62,7 +62,18 @@ function openSocket() {
                     alert("Can't jump to there")
             }
 
-            //else if(obj.messageType == "i")
+            else if(obj.messageType == "i"){
+                if(obj.aiMoveType == "f"){
+                    //placeFenceForReal();
+                    
+                    aiPlaceFence(obj.fenceID);
+                }
+                else{
+                    aiMovePlayer(obj.newPos);
+                    //movePlayerForReal();
+                }
+                
+            }
 
 
             writeResponse("" + obj.isLegal);

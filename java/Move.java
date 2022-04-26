@@ -1,5 +1,5 @@
 public class Move {
-    String moveType;
+    private String moveType;
 
     public Move(){}
 
