@@ -162,7 +162,7 @@ public class Game {
         if ((fence.getFirstId() % 17 == 16) || (fence.getFirstId() > 135)) {
             errorType = 3;
         }
-
+/*
         // setup for dfs check
         this.getBoard().addEdge(fence.getA(), fence.getB());
         this.getBoard().addEdge(fence.getC(), fence.getD());
@@ -175,7 +175,7 @@ public class Game {
         // edges are no longer relavent
         this.getBoard().removeEdge(fence.getA(), fence.getB());
         this.getBoard().removeEdge(fence.getC(), fence.getD());
-
+*/
         return errorType;
     }
 
@@ -221,12 +221,15 @@ public class Game {
 
             for (int i = 0; i < gameBoard[0].length; i++) {
                 // Get current pos on board by row and col
-                int cur_pos = t * 9 + i;
+                // int cur_pos = (t_row * 9 + i % 9);
 
-                if (!parentNode.containsKey(cur_pos)) {
-                    parentNode.put(cur_pos, t);
-                    queue.add(cur_pos);
+                if(gameBoard[t][i]){
+                    if (!parentNode.containsKey(i)) {
+                        parentNode.put(i, t);
+                        queue.add(i);
+                    }
                 }
+                
             }
         }
 

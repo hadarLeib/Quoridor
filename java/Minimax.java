@@ -25,41 +25,33 @@ public class Minimax {
             return heuristic(game);
         }
 
-        if (maxPlayer) {
-            int val;
-            ValidMoves validMoves = new ValidMoves();
+        int val;
+        ValidMoves validMoves = new ValidMoves();
 
-            for (Move move : validMoves.getValidMovesList(game, game.getCurrentPlayerPos())) {
-                Game child = new Game(game);
-                child.doMove(move);
-                val = minimaxWithAlphaBeta(child, (depth - 1), alpha, beta, false);
+        for (Move move : validMoves.getValidMovesList(game, game.getCurrentPlayerPos())) {
+            Game child = new Game(game);
+            child.doMove(move);
+            val = minimaxWithAlphaBeta(child, depth, alpha, beta, false);
 
-                if (val > alpha) {
-                    alpha = val;
-                    this.bestMove = move;
+            if (val > alpha) {
+                alpha = val;
+                if(move.getMoveType().equals("m")){
+                    this.bestMove = new PlayerMove(((PlayerMove)move).getPlayerOldPos(), ((PlayerMove)move).getPlayerNewPos());
                 }
-                if (beta <= alpha) {
-                    break;
+                else{
+                    this.bestMove = new Fence(((Fence)move).getFirstId(), ((Fence)move).getSecondId(),
+                    ((Fence)move).getIsHorizontal(), ((Fence)move).getA(), ((Fence)move).getB(),
+                    ((Fence)move).getC(), ((Fence)move).getD());
                 }
+
             }
-
-            return alpha;
+            if (beta <= alpha) {
+                break;
+            }
         }
 
-        else {
-            ValidMoves validMoves = new ValidMoves();
+        return alpha;
 
-            for (Move move : validMoves.getValidMovesList(game, game.getCurrentPlayerPos())) {
-
-                Game child = new Game(game);
-                child.doMove(move);
-                beta = Math.max(beta, minimaxWithAlphaBeta(child, (depth - 1), alpha, beta, true));
-
-                if (beta <= alpha)
-                    break;
-            }
-            return beta;
-        }
     }
 
     public int minimaxWithAlphaBeta(Game game, int depth, int alpha, int beta, boolean maxPlayer) {

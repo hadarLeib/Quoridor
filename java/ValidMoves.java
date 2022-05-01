@@ -32,10 +32,10 @@ public class ValidMoves {
             }
         }
         
-/*
+
         // adding fence moves
-        int count = 0;
-        for (int i = 0; i < MAX_POSSIBLE_FENCE_ID; i++) {
+        // int count = 0;
+        for (int i = 0; i <= MAX_POSSIBLE_FENCE_ID; i++) {
             this.getCurrABCD(i);
 
             Fence fence = new Fence(i, getSecondId(i), isFenceHorizontal(i),
@@ -44,11 +44,11 @@ public class ValidMoves {
 
                     
             if (game.checkFenceLegal(fence) == 1) {
-                count ++;
+                //count++;
                 addMoveToValidMovesList(fence);
             }
         }
-        System.out.println(count);*/
+        //System.out.println(count);
 
         return this.validMoves;
     }

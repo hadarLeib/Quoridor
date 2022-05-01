@@ -45,7 +45,8 @@ function openSocket() {
 
                 // fence out of bounds
                 else if (obj.errorType == 3){
-                    alert("Fence is out of bounds");
+                    //alert("Fence is out of bounds");
+                    alert("Placing a fence there will completely block the other player");
                 }
 
                 // fence will completely block player
@@ -96,7 +97,6 @@ function openSocket() {
 function send() {
     var text = document.getElementById("messageinput").value;
 
-    // [Ido] Added type to prevent error on the server when trying 
     // to read "type" for regular `send` messages.
     var obj = { "type": "s", "message": text, "name": "hadar" };
 

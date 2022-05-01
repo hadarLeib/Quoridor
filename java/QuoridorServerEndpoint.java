@@ -65,6 +65,8 @@ public class QuoridorServerEndpoint {
                 this.game.addFenceToMap(fence);
                 this.game.getCurrPlayer().useFence();
                 this.game.switchPayer();
+                this.game.getBoard().removeEdge(a, b);
+                this.game.getBoard().removeEdge(c, d);
             }
 
             innerObject.addProperty("isLegal", (fenceLegalErrorType == 1)); // if returns one, no errors
@@ -87,7 +89,7 @@ public class QuoridorServerEndpoint {
         }
 
         else if (messageType.equals("i")) {
-            Minimax minimaxAlphaBeta = new Minimax(2);
+            Minimax minimaxAlphaBeta = new Minimax(2); ////////// depth change ///////////
             Move move = new Move();
             move = minimaxAlphaBeta.bestMoveCalc(this.game);
 
@@ -96,8 +98,10 @@ public class QuoridorServerEndpoint {
                 this.game.addFenceToMap(((Fence) move));
                 this.game.getCurrPlayer().useFence();
                 this.game.switchPayer();
-                //innerObject.addProperty("aiMoveType", "f");
-                //innerObject.addProperty("fenceID", ((Fence)move).getFirstId());
+                this.game.getBoard().removeEdge(((Fence) move).getA(), ((Fence) move).getB());
+                this.game.getBoard().removeEdge(((Fence) move).getC(), ((Fence) move).getD());
+                innerObject.addProperty("aiMoveType", "f");
+                innerObject.addProperty("fenceID", ((Fence)move).getFirstId());
 
             }
 
