@@ -19,12 +19,8 @@ public class Minimax {
         return this.bestMove;
     }
 
-    public int minimaxWithAlphaBetaWithVal(Game game, int depth, int alpha, int beta, boolean maxPlayer) {
-
-        if (depth == 0 || game.isOver()) {
-            return heuristic(game);
-        }
-
+    public void minimaxWithAlphaBetaWithVal(Game game, int depth, int alpha, int beta, boolean maxPlayer) {
+        
         int val;
         ValidMoves validMoves = new ValidMoves();
 
@@ -49,8 +45,6 @@ public class Minimax {
                 break;
             }
         }
-
-        return alpha;
 
     }
 
