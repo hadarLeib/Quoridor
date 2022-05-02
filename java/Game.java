@@ -11,6 +11,7 @@ public class Game {
     private Player currentPlayer;
     private HashMap<Integer, Fence> fencesInGame;
 
+    //default constructor
     public Game() {
         this.board = new Board();
         this.board.initAdjBoard();
@@ -30,14 +31,17 @@ public class Game {
         this.fencesInGame.putAll(game.getfencesInGame());
     }
 
+    //returns Player: player1
     public Player getPlayerOne() {
         return this.player1;
     }
 
+    //returns Player: player2
     public Player getPlayerTwo() {
         return this.player2;
     }
 
+    //switches the current player in this game
     public void switchPayer() {
         if (this.currentPlayer == player1)
             this.currentPlayer = player2;
@@ -45,83 +49,102 @@ public class Game {
             this.currentPlayer = player1;
     }
 
+    //returns Board: board of this game
     public Board getBoard() {
         return this.board;
     }
 
+    //returns Player: this game's current player
     public Player getCurrPlayer() {
         return this.currentPlayer;
     }
 
+    //returns int: this game's current player's position
     public int getCurrentPlayerPos() {
         return this.currentPlayer.getPossition();
     }
 
+    //returns int: this game's other(not current) player's position
     public int getOtherPlayerPos() {
         if (this.currentPlayer == this.player1)
             return this.player2.getPossition();
         return this.player1.getPossition();
     }
 
+    //recieves ((Player) player) and ((int) pos)
+    //sets player's position to pos
     public void setPlayerPos(Player player, int pos) {
         player.setPossition(pos);
     }
 
+    //receives ((int) oldPos) and ((int) newPos) - two positions on the board
+    //checks if the jump from oldPos to newPos is legal
+    //considers special cases of player jumping over other player
+    //returns boolean: true if the jump is legal and false if not
     public boolean checkIfLegalConsideringJump(int oldPos, int newPos) {
         Board boardCopy = new Board(this.getBoard());
         int playerPosDif = getOtherPlayerPos() - getCurrentPlayerPos();
 
         switch (playerPosDif) {
-            case (1):
+            case (1): // curr player is on the left side of other player
                 boardCopy.removeEdge(oldPos, getOtherPlayerPos());
 
-                if (boardCopy.isAdj((getOtherPlayerPos()), (getOtherPlayerPos() + 1)))
+                //checks that there is no fence on right side of other player
+                if (boardCopy.isAdj((getOtherPlayerPos()), (getOtherPlayerPos() + 1))) 
                     boardCopy.addEdge(oldPos, (getOtherPlayerPos() + 1));
                 break;
 
-            case (-1):
+            case (-1): // curr player is on the right side of other player
                 boardCopy.removeEdge(oldPos, getOtherPlayerPos());
 
+                //checks that there is no fence on left side of other player
                 if (boardCopy.isAdj((getOtherPlayerPos()), (getOtherPlayerPos() - 1)))
                     boardCopy.addEdge(oldPos, (getOtherPlayerPos() - 1));
                 break;
 
-            case (9):
+            case (9): // curr player is below the other player
                 boardCopy.removeEdge(oldPos, getOtherPlayerPos());
 
+                //checks that there is no fence above other player
                 if (boardCopy.isAdj((getOtherPlayerPos()), (getOtherPlayerPos() + 9)))
                     boardCopy.addEdge(oldPos, (getOtherPlayerPos() + 9));
                 break;
 
-            case (-9):
+            case (-9): // curr player is above the other player
                 boardCopy.removeEdge(oldPos, getOtherPlayerPos());
 
+                //checks that there is no fence below other player
                 if (boardCopy.isAdj((getOtherPlayerPos()), (getOtherPlayerPos() - 9)))
                     boardCopy.addEdge(oldPos, (getOtherPlayerPos() - 9));
                 break;
 
             default:
-                // System.out.println("regular move");
+                // regular move
         }
 
         return boardCopy.isAdj(oldPos, newPos);
     }
 
-    // fence related functions
-
+    //retruns map of all fences in the game
     public HashMap<Integer, Fence> getfencesInGame() {
         return this.fencesInGame;
     }
 
+    //adds a fence to the map
     public void addFenceToMap(Fence fence) {
         this.fencesInGame.put(fence.getFirstId(), fence);
         this.fencesInGame.put(fence.getSecondId(), fence);
     }
 
+    //receves (int(id))
+    //returns Fence: the fence from the map of fences in the game with that id(key)
     public Fence getFenceById(int id) {
         return this.fencesInGame.get(id);
     }
 
+    //receives ((Fence)fence)
+    //checks if the fence is legal on the board
+    //return int: error type
     public int checkFenceLegal(Fence fence) {
         /*
          * returns 1 if move is legal
@@ -159,10 +182,12 @@ public class Game {
         }
 
         // no out of bounds
+        //%17 == 16 for horizontal out of bounds
+        //>135 for vertical out of bounds
         if ((fence.getFirstId() % 17 == 16) || (fence.getFirstId() > 135)) {
             errorType = 3;
         }
-/*
+
         // setup for dfs check
         this.getBoard().addEdge(fence.getA(), fence.getB());
         this.getBoard().addEdge(fence.getC(), fence.getD());
@@ -175,7 +200,7 @@ public class Game {
         // edges are no longer relavent
         this.getBoard().removeEdge(fence.getA(), fence.getB());
         this.getBoard().removeEdge(fence.getC(), fence.getD());
-*/
+
         return errorType;
     }
 

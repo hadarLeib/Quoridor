@@ -20,20 +20,27 @@ public class Board {
         }
     }
 
+    //returns adjMatrix
     public boolean[][] getAdjacentMatrix(){
         return this.adjMatrix;
     }
 
+    //receives two points and adds an edge between them
+    //both directions
     public void addEdge(int source, int destination) {
         this.adjMatrix[source][destination] = true;
         this.adjMatrix[destination][source] = true;
     }
 
+    //receives two points and removes the edge between them
+    //both directions
     public void removeEdge(int source, int destination) {
         this.adjMatrix[source][destination] = false;
         this.adjMatrix[destination][source] = false;
     }
 
+    //is called in the begining of the game
+    //adds edges where there needs to be in initialization
     public void initAdjBoard() {
         int i = 0, j = 0;
         for (i = 0; i < this.vertices; i++) {
@@ -52,9 +59,14 @@ public class Board {
         }
     }
 
+    //receives a position on the board ((int) playerPos)
+    //receives the Player ((Player) currentPlayer)
+    //checks if it is possible for the player to get to the end (it's winning row)
+    //returns boolean: true if this is possible, false if not
     public boolean playerCanGetToEnd(int playerPos, Player currentPlayer) {
         boolean[] visited = new boolean[this.vertices];
         int[] parents = new int[this.vertices];
+        int curPlayerPos;
 
         // Initialize with -1 to know when to stop if we haven't reached playerPos
         for (int i = 0; i < this.vertices; i++) {
@@ -63,6 +75,7 @@ public class Board {
 
         dfs(playerPos, visited, parents);
 
+
         // 72 is starting point for range 72 -> 80. possible end points for
         // player1(playerNo = true)
         // 0 for range 0 -> 8. possible end points for player2(playerNo = false)
@@ -70,7 +83,7 @@ public class Board {
 
         // 9 possible endpoints.
         for (int i = 0; i < 9; i++) {
-            int curPlayerPos = endPlayerPos + i;
+            curPlayerPos = endPlayerPos + i;
 
             while (parents[curPlayerPos] != -1) {
                 if (parents[curPlayerPos] == playerPos) {
@@ -81,9 +94,13 @@ public class Board {
             }
         }
 
-        return false; // send to client
+        return false;
     }
 
+    //receives starting position ((int) start)
+    //receives (boolean) array of visited 
+    //receives (int) array of parents
+    //function will fill parent array with the help of the visited array
     public void dfs(int start, boolean[] visited, int[] parents) {
         // Set current node as visited
         visited[start] = true;
@@ -100,6 +117,7 @@ public class Board {
         }
     }
 
+    //prints graph - helper to check graph state, not relevant for game
     public void printAdjGraph() {
         for (int i = 0; i < this.vertices; i++) {
             for (int j = 0; j < this.vertices; j++) {
@@ -114,6 +132,8 @@ public class Board {
         }
     }
 
+    //receives to (int) points in graph
+    //returns boolean: true if the two points are adjacent and false if not
     public boolean isAdj(int sourcePos, int destPos) {
         return (this.adjMatrix[sourcePos][destPos] || this.adjMatrix[destPos][sourcePos]);
     }

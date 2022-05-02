@@ -7,7 +7,9 @@ public class Fence extends Move{
     private int d;
     private boolean isHorizontal;
 
-    
+    //constructor
+    //a, b, c, d are the nodes in the graph that will be affected by the fence
+    //in placing a fence, a will be disconnected froam b and c from d
     public Fence(int firstId, int secondId, boolean isHorizontal, int a, int b, int c, int d){
         super("f");
         this.firstId = firstId;
@@ -19,30 +21,37 @@ public class Fence extends Move{
         this.isHorizontal = isHorizontal;
     }
 
+    //returns boolean: true if fence is horizontal, false if not
     public boolean getIsHorizontal(){
         return this.isHorizontal;
     }
 
+    //returns int: the first id of the fence
     public int getFirstId(){
         return this.firstId;
     }
 
+    //returns int: the second id of the fence
     public int getSecondId(){
         return this.secondId;
     }
 
+    //returns int: A node
     public int getA(){
         return this.a;
     }
 
+    //returns int: B node
     public int getB(){
         return this.b;
     }
 
+    //returns int: C node
     public int getC(){
         return this.c;
     }
 
+    //returns int: D node
     public int getD(){
         return this.d;
     }

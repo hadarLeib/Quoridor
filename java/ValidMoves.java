@@ -44,11 +44,9 @@ public class ValidMoves {
 
                     
             if (game.checkFenceLegal(fence) == 1) {
-                //count++;
                 addMoveToValidMovesList(fence);
             }
         }
-        //System.out.println(count);
 
         return this.validMoves;
     }
@@ -73,8 +71,6 @@ public class ValidMoves {
         int col = (firstId - 9 * row) % 8;
         
         if (isFenceHorizontal(firstId)) {
-            // System.out.println("row: " + firstId + " / 17 + " + row);
-            // System.out.println("col: " + "(" + firstId + " - 9 * row) % 8 = " + col);
             this.CURRENT_A = col + row * 9;
             this.CURRENT_B = this.CURRENT_A + 9;
             this.CURRENT_C = this.CURRENT_A + 1;
@@ -82,8 +78,6 @@ public class ValidMoves {
         }
 
         else {
-            // System.out.println("row: " + firstId + " / 17 + " + row);
-            // System.out.println("col: " + "(" + firstId + " - 9 * row) % 8 = " + col);
             this.CURRENT_A = col + row * 9;
             this.CURRENT_B = this.CURRENT_A + 1;
             this.CURRENT_C = this.CURRENT_A + 9;
