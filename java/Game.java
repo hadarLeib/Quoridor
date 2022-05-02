@@ -9,6 +9,13 @@ public class Game {
     private Player player1; // white - starts from low to high
     private Player player2; // black - starts from high to low
     private Player currentPlayer;
+
+    /*
+    the integer, fence hashmap:
+    fences in game are entered twice into the hashmap-
+    once with the key being the first id
+    second time key is second id
+    this makes the checking of thee fences later far less complex and */
     private HashMap<Integer, Fence> fencesInGame;
 
     //default constructor
@@ -204,21 +211,36 @@ public class Game {
         return errorType;
     }
 
+    //returns boolean: true if game is over (player has reached anending point)
+    //false if not
     public boolean isOver() {
         return (this.player1.getPossition() > 71 || this.player2.getPossition() < 9);
     }
 
+
+    //receives ((Move) move)
+    //function will do the move
     public void doMove(Move move) {
         if (move.getMoveType().equals("m")) {
+            //the move is a piece movement
             setPlayerPos(getCurrPlayer(), ((PlayerMove) move).getPlayerNewPos());
             switchPayer();
-        } else if (move.getMoveType().equals("f")) {
+        }
+
+        else if (move.getMoveType().equals("f")) {
+            //the move is a fence placement
             addFenceToMap(((Fence) move));
             getCurrPlayer().useFence();
+            getBoard().removeEdge(((Fence) move).getA(), ((Fence) move).getB());
+            getBoard().removeEdge(((Fence) move).getC(), ((Fence) move).getD());
             switchPayer();
         }
     }
 
+    //receives ((int) src) position on the board
+    //receives ((int)row) a row on the board (0 - 8)
+    //function will find the shortest path from src position to anywhere on the row of the board
+    //return List<Integer>: list of integers that represent the IDs of the positioons in the shortest path
     public List<Integer> shortestPathToRow(int src, int row) {
         List<Integer> path = new LinkedList<>();
         Queue<Integer> queue = new LinkedList<>();
@@ -246,7 +268,6 @@ public class Game {
 
             for (int i = 0; i < gameBoard[0].length; i++) {
                 // Get current pos on board by row and col
-                // int cur_pos = (t_row * 9 + i % 9);
 
                 if(gameBoard[t][i]){
                     if (!parentNode.containsKey(i)) {

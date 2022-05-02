@@ -21,56 +21,77 @@ public class ValidMoves {
         MAX_POSSIBLE_FENCE_ID = 134;
     }
 
+    //receives the game(Game) and (int)playerPositions
+    //function will run on all the options of moves in the game and add the legal options to th list
+    //returns List<Move>: the list of valid moves created
     public List<Move> getValidMovesList(Game game, int playerPosition) {
         this.validMoves.clear();
 
         // adding player moves
         for (int i = 0; i < AMOUNT_SQUARES_ON_BOARD; i++) {
             if (game.checkIfLegalConsideringJump(playerPosition, i)) {
-                PlayerMove playerMove = new PlayerMove(playerPosition, i);
-                this.addMoveToValidMovesList(playerMove);
+                //move is legal
+                PlayerMove playerMove = new PlayerMove(playerPosition, i);//create PlayerMove
+                this.addMoveToValidMovesList(playerMove);//add to list
             }
         }
         
 
         // adding fence moves
-        // int count = 0;
         for (int i = 0; i <= MAX_POSSIBLE_FENCE_ID; i++) {
+            
             this.getCurrABCD(i);
 
             Fence fence = new Fence(i, getSecondId(i), isFenceHorizontal(i),
                     this.CURRENT_A, this.CURRENT_B,
-                    this.CURRENT_C, this.CURRENT_D);
+                    this.CURRENT_C, this.CURRENT_D);//create Fence to try
 
                     
             if (game.checkFenceLegal(fence) == 1) {
-                addMoveToValidMovesList(fence);
+                //fence placement is legal
+                addMoveToValidMovesList(fence);//add to list
             }
         }
 
         return this.validMoves;
     }
 
+    //receives Move move
+    //adds to the list of valid moves
     public void addMoveToValidMovesList(Move move) {
         this.validMoves.add(move);
     }
 
+    //receives int firstId (of a fence)
+    //returns int: the second id of the fence
     public int getSecondId(int firstId) {
-        if (isFenceHorizontal(firstId))
+        if (isFenceHorizontal(firstId)){
+            //if fence is horizontal, the next id will be one on the right
             return firstId + 1;
+        }
+
+        //if fence is vertical, the next fence id will be one bellow (+17)
         return firstId + 17;
     }
 
+    //receives the first id of the fence
+    //calculates by the id if the fence is horizontal or not
+    //returns boolean: true if it is horizontal, false if not
     public boolean isFenceHorizontal(int firstId) {
         return (firstId % 17 > 7);
     }
 
+    //receives int firstId (the first id of a fence)
+    //calculates the id s of the four nodes (a b c d) affected by the fence
+    //a and b will have a fence between them
+    //c and d will have a fence between them
     public void getCurrABCD(int firstId) {
 
-        int row = firstId / 17;
-        int col = (firstId - 9 * row) % 8;
+        int row = firstId / 17; //row fence is in
+        int col = (firstId - 9 * row) % 8; //columb fence is in
         
         if (isFenceHorizontal(firstId)) {
+            //if fence is horizontal, b is below a, c is right of a, d is below c
             this.CURRENT_A = col + row * 9;
             this.CURRENT_B = this.CURRENT_A + 9;
             this.CURRENT_C = this.CURRENT_A + 1;
@@ -78,6 +99,7 @@ public class ValidMoves {
         }
 
         else {
+            //if fence is vertical, b right of a, c below a, d is right of c
             this.CURRENT_A = col + row * 9;
             this.CURRENT_B = this.CURRENT_A + 1;
             this.CURRENT_C = this.CURRENT_A + 9;
