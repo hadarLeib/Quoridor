@@ -194,7 +194,7 @@ public class Game {
         if ((fence.getFirstId() % 17 == 16) || (fence.getFirstId() > 135)) {
             errorType = 3;
         }
-
+/*
         // setup for dfs check
         this.getBoard().addEdge(fence.getA(), fence.getB());
         this.getBoard().addEdge(fence.getC(), fence.getD());
@@ -207,7 +207,7 @@ public class Game {
         // edges are no longer relavent
         this.getBoard().removeEdge(fence.getA(), fence.getB());
         this.getBoard().removeEdge(fence.getC(), fence.getD());
-
+*/
         return errorType;
     }
 
