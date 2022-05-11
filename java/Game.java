@@ -3,6 +3,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Collections;
 import java.util.Queue;
+import java.util.Map.Entry;
 
 public class Game {
     private Board board;
@@ -33,9 +34,15 @@ public class Game {
         this.board = new Board(game.getBoard());
         this.player1 = new Player(game.getPlayerOne());
         this.player2 = new Player(game.getPlayerTwo());
-        this.currentPlayer = game.getCurrPlayer();
+        //this.currentPlayer = game.getCurrPlayer();
+        if(game.getCurrPlayer() == game.getPlayerOne()){
+            this.currentPlayer = this.player1;
+        }
+        else{
+            this.currentPlayer = this.player2;
+        }
         this.fencesInGame = new HashMap<Integer, Fence>();
-        this.fencesInGame.putAll(game.getfencesInGame());
+        this.fencesInGame = getCopyfencesInGame();
     }
 
     //returns Player: player1
@@ -137,6 +144,16 @@ public class Game {
         return this.fencesInGame;
     }
 
+    public HashMap<Integer, Fence> getCopyfencesInGame() {
+        HashMap<Integer,Fence> copyMap = new HashMap<>();
+        for (Entry entry : this.fencesInGame.entrySet()) {
+            copyMap.put((Integer)entry.getKey(),new Fence((Fence)entry.getValue()));
+            
+        }
+
+        return copyMap;
+    }
+
     //adds a fence to the map
     public void addFenceToMap(Fence fence) {
         this.fencesInGame.put(fence.getFirstId(), fence);
@@ -194,6 +211,11 @@ public class Game {
         if ((fence.getFirstId() % 17 == 16) || (fence.getFirstId() > 135)) {
             errorType = 3;
         }
+
+        if(!this.getCurrPlayer().hasFences()){
+            errorType = 5;
+        }
+
 /*
         // setup for dfs check
         this.getBoard().addEdge(fence.getA(), fence.getB());

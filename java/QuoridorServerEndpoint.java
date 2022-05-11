@@ -103,9 +103,11 @@ public class QuoridorServerEndpoint {
 
         // AI's turn
         else if (messageType.equals("i")) {
-            Minimax minimaxAlphaBeta = new Minimax(2); ////////// depth change ///////////
+            Minimax minimaxAlphaBeta = new Minimax(0); ////////// depth change ///////////
             Move move = new Move();
-            move = minimaxAlphaBeta.bestMoveCalc(this.game);
+            Game gameCopy = new Game(this.game);
+
+            move = minimaxAlphaBeta.bestMoveCalc(gameCopy);
             //move will be the best move for the computer to make
 
             if (move.getMoveType().equals("f")) {

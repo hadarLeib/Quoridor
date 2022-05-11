@@ -2,7 +2,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class ValidMoves {
-    private List<Move> validMoves;
 
     private int AMOUNT_SQUARES_ON_BOARD;
     private int MAX_POSSIBLE_FENCE_ID;
@@ -13,9 +12,6 @@ public class ValidMoves {
 
 
     public ValidMoves(){
-
-        validMoves = new ArrayList<Move>();
-
         // constants
         AMOUNT_SQUARES_ON_BOARD = 81;
         MAX_POSSIBLE_FENCE_ID = 134;
@@ -25,14 +21,14 @@ public class ValidMoves {
     //function will run on all the options of moves in the game and add the legal options to th list
     //returns List<Move>: the list of valid moves created
     public List<Move> getValidMovesList(Game game, int playerPosition) {
-        this.validMoves.clear();
+        List<Move> validMoves = new ArrayList<Move>();
 
         // adding player moves
         for (int i = 0; i < AMOUNT_SQUARES_ON_BOARD; i++) {
             if (game.checkIfLegalConsideringJump(playerPosition, i)) {
                 //move is legal
                 PlayerMove playerMove = new PlayerMove(playerPosition, i);//create PlayerMove
-                this.addMoveToValidMovesList(playerMove);//add to list
+                validMoves.add(playerMove);//add to list
             }
         }
         
@@ -49,17 +45,11 @@ public class ValidMoves {
                     
             if (game.checkFenceLegal(fence) == 1) {
                 //fence placement is legal
-                addMoveToValidMovesList(fence);//add to list
+                validMoves.add(fence);//add to list
             }
         }
 
-        return this.validMoves;
-    }
-
-    //receives Move move
-    //adds to the list of valid moves
-    public void addMoveToValidMovesList(Move move) {
-        this.validMoves.add(move);
+        return validMoves;
     }
 
     //receives int firstId (of a fence)

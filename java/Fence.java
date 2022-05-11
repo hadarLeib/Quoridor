@@ -21,6 +21,17 @@ public class Fence extends Move{
         this.isHorizontal = isHorizontal;
     }
 
+    public Fence(Fence fence){
+        super("f");
+        this.firstId = fence.firstId;
+        this.secondId = fence.secondId;
+        this.a = fence.a;
+        this.b = fence.b;
+        this.c = fence.c;
+        this.d = fence.d;
+        this.isHorizontal = fence.isHorizontal;
+    }
+
     //returns boolean: true if fence is horizontal, false if not
     public boolean getIsHorizontal(){
         return this.isHorizontal;

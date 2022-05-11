@@ -116,7 +116,9 @@ var Quoridor = new function () {
             return $(fence).next();
         }
         else {
-            adjacentIndex = parseInt($(fence).attr('id').split('_')[1]) + 17;
+            var fenceId = $(fence).attr('id');
+
+            adjacentIndex = parseInt(fenceId.split('_')[1]) + 17;
             return $($('.fence')[adjacentIndex]);
         }
     }
@@ -190,7 +192,7 @@ var Quoridor = new function () {
     }
 
     aiPlaceFence = function(id){
-        var fence = $("#" + id);
+        var fence = $("#fence_" + id);
         $(fence).addClass('placed');
         getAdjacentFence(fence).addClass('placed');
         this.currentTurn.fencesRemaining--;
