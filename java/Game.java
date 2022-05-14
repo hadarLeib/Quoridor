@@ -216,10 +216,12 @@ public class Game {
             errorType = 5;
         }
 
-/*
+
         // setup for dfs check
-        this.getBoard().addEdge(fence.getA(), fence.getB());
-        this.getBoard().addEdge(fence.getC(), fence.getD());
+        
+
+        this.getBoard().removeEdge(fence.getA(), fence.getB());
+        this.getBoard().removeEdge(fence.getC(), fence.getD());
 
         // player cant get across
         if (!this.getBoard().playerCanGetToEnd(this.getCurrentPlayerPos(), this.getCurrPlayer())) {
@@ -227,9 +229,9 @@ public class Game {
         }
 
         // edges are no longer relavent
-        this.getBoard().removeEdge(fence.getA(), fence.getB());
-        this.getBoard().removeEdge(fence.getC(), fence.getD());
-*/
+        this.getBoard().addEdge(fence.getA(), fence.getB());
+        this.getBoard().addEdge(fence.getC(), fence.getD());
+
         return errorType;
     }
 

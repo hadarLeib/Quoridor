@@ -49,14 +49,24 @@ public class Board {
             }
         }
         for (i = 0; i < this.vertices - 1; i++) {
-            this.adjMatrix[i][i + 1] = true;
-            this.adjMatrix[i + 1][i] = true;
+            if(i % 9 != 8){
+                this.adjMatrix[i][i + 1] = true;
+                this.adjMatrix[i + 1][i] = true;
+            }
+            
             if (i < 72) {
                 this.adjMatrix[i][i + 9] = true;
                 this.adjMatrix[i + 9][i] = true;
             }
+            
+            
 
         }
+
+        for (i = 0; i < this.vertices - 1; i++){
+
+        }
+
     }
 
     //receives a position on the board ((int) playerPos)

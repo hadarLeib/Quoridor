@@ -103,7 +103,7 @@ public class QuoridorServerEndpoint {
 
         // AI's turn
         else if (messageType.equals("i")) {
-            Minimax minimaxAlphaBeta = new Minimax(0); ////////// depth change ///////////
+            Minimax minimaxAlphaBeta = new Minimax(2); ////////// depth change ///////////
             Move move = new Move();
             Game gameCopy = new Game(this.game);
 
