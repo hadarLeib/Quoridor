@@ -9,7 +9,7 @@ public class Minimax {
 
     //receives Game game and returns the best move for AI player to make (Move) 
     public Move bestMoveCalc(Game game) {
-        /*
+        
         if (game.getCurrPlayer().hasFences()) {
             //if has fences left - check best move option using minimax alpha beta
             Game gameCopy = new Game(game);
@@ -21,9 +21,9 @@ public class Minimax {
             this.bestMove = new PlayerMove(game.getCurrentPlayerPos(),
                     game.shortestPathToRow(game.getCurrentPlayerPos(), 0).get(0));
         }
-*/
-        Game gameCopy = new Game(game);
-        minimaxWithAlphaBetaWithVal(gameCopy, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+
+        // Game gameCopy = new Game(game);
+        // minimaxWithAlphaBetaWithVal(gameCopy, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
         return this.bestMove;
     }
 

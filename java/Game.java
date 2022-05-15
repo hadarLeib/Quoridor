@@ -41,8 +41,16 @@ public class Game {
         else{
             this.currentPlayer = this.player2;
         }
+
         this.fencesInGame = new HashMap<Integer, Fence>();
-        this.fencesInGame = getCopyfencesInGame();
+
+        if(!game.fencesInGame.isEmpty()){
+            for (HashMap.Entry<Integer,Fence> entry : game.fencesInGame.entrySet()) {
+                this.fencesInGame.put(entry.getKey(), entry.getValue());
+                
+            }
+        }
+        
     }
 
     //returns Player: player1
@@ -145,13 +153,18 @@ public class Game {
     }
 
     public HashMap<Integer, Fence> getCopyfencesInGame() {
+        //firrst attempt:
         HashMap<Integer,Fence> copyMap = new HashMap<>();
-        for (Entry entry : this.fencesInGame.entrySet()) {
-            copyMap.put((Integer)entry.getKey(),new Fence((Fence)entry.getValue()));
+        for (HashMap.Entry<Integer,Fence> entry : this.fencesInGame.entrySet()) {
+            copyMap.put(entry.getKey(), entry.getValue());
             
         }
 
         return copyMap;
+
+        //second attempt:
+        //return new HashMap<Integer, Fence>(this.fencesInGame);
+
     }
 
     //adds a fence to the map
