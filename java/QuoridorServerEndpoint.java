@@ -14,6 +14,7 @@ import java.io.IOException;
 @ServerEndpoint(value = "/echo")
 public class QuoridorServerEndpoint {
     Game game;
+    Move lastMove = new Move();
 
     //opens session server - client
     @OnOpen
@@ -40,6 +41,8 @@ public class QuoridorServerEndpoint {
         Gson gson = new Gson();
         boolean isAdj;
         String str = "";
+
+
 
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(message).getAsJsonObject();
@@ -107,7 +110,8 @@ public class QuoridorServerEndpoint {
             Move move = new Move();
             Game gameCopy = new Game(this.game);
 
-            move = minimaxAlphaBeta.bestMoveCalc(gameCopy);
+            move = minimaxAlphaBeta.bestMoveCalc(gameCopy, lastMove);
+            lastMove = move;
             //move will be the best move for the computer to make
 
             if (move.getMoveType().equals("f")) {

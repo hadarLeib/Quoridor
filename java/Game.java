@@ -109,35 +109,41 @@ public class Game {
 
         switch (playerPosDif) {
             case (1): // curr player is on the left side of other player
-                boardCopy.removeEdge(oldPos, getOtherPlayerPos());
+                
 
                 //checks that there is no fence on right side of other player
-                if (boardCopy.isAdj((getOtherPlayerPos()), (getOtherPlayerPos() + 1))) 
+                if (boardCopy.isAdj((getOtherPlayerPos()), (getOtherPlayerPos() + 1)) && boardCopy.isAdj(getOtherPlayerPos(), getCurrentPlayerPos())){
+                    boardCopy.removeEdge(oldPos, getOtherPlayerPos());
                     boardCopy.addEdge(oldPos, (getOtherPlayerPos() + 1));
+                }
                 break;
 
             case (-1): // curr player is on the right side of other player
-                boardCopy.removeEdge(oldPos, getOtherPlayerPos());
+                
 
                 //checks that there is no fence on left side of other player
-                if (boardCopy.isAdj((getOtherPlayerPos()), (getOtherPlayerPos() - 1)))
+                if (boardCopy.isAdj((getOtherPlayerPos()), (getOtherPlayerPos() - 1)) && boardCopy.isAdj(getOtherPlayerPos(), getCurrentPlayerPos())){
+                    boardCopy.removeEdge(oldPos, getOtherPlayerPos());
                     boardCopy.addEdge(oldPos, (getOtherPlayerPos() - 1));
-                break;
+                }
+               break;
 
             case (9): // curr player is below the other player
-                boardCopy.removeEdge(oldPos, getOtherPlayerPos());
 
                 //checks that there is no fence above other player
-                if (boardCopy.isAdj((getOtherPlayerPos()), (getOtherPlayerPos() + 9)))
+                if (boardCopy.isAdj((getOtherPlayerPos()), (getOtherPlayerPos() + 9)) && boardCopy.isAdj(getOtherPlayerPos(), getCurrentPlayerPos())){
+                    boardCopy.removeEdge(oldPos, getOtherPlayerPos());
                     boardCopy.addEdge(oldPos, (getOtherPlayerPos() + 9));
+                }
                 break;
 
             case (-9): // curr player is above the other player
-                boardCopy.removeEdge(oldPos, getOtherPlayerPos());
 
                 //checks that there is no fence below other player
-                if (boardCopy.isAdj((getOtherPlayerPos()), (getOtherPlayerPos() - 9)))
+                if (boardCopy.isAdj((getOtherPlayerPos()), (getOtherPlayerPos() - 9)) && boardCopy.isAdj(getOtherPlayerPos(), getCurrentPlayerPos())){
+                    boardCopy.removeEdge(oldPos, getOtherPlayerPos());
                     boardCopy.addEdge(oldPos, (getOtherPlayerPos() - 9));
+                }
                 break;
 
             default:
@@ -307,6 +313,7 @@ public class Game {
                 // Get current pos on board by row and col
 
                 if(gameBoard[t][i]){
+                //if(checkIfLegalConsideringJump(t, i)){
                     if (!parentNode.containsKey(i)) {
                         parentNode.put(i, t);
                         queue.add(i);

@@ -24,6 +24,7 @@ public class ValidMoves {
         List<Move> validMoves = new ArrayList<Move>();
 
         // adding player moves
+        
         for (int i = 0; i < AMOUNT_SQUARES_ON_BOARD; i++) {
             if (game.checkIfLegalConsideringJump(playerPosition, i)) {
                 //move is legal
@@ -32,7 +33,19 @@ public class ValidMoves {
             }
         }
         
+/*
+        int row;
+        if(game.getCurrPlayer().getIsPlayerWhite()){
+            row = 8;
+        }
+        else{
+            row = 0;
+        }
+        PlayerMove playerMove = new PlayerMove(playerPosition, game.shortestPathToRow(playerPosition, row).get(0));
 
+        validMoves.add(playerMove);
+*/
+        
         // adding fence moves
         for (int i = 0; i <= MAX_POSSIBLE_FENCE_ID; i++) {
             
